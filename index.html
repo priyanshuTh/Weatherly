@@ -6,12 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weatherly</title>
     <link rel="stylesheet" href="css/style.css">
-    <script src="js/script.js"></script>
+    <script src="js/script.js" defer></script>
 </head>
 
 <body>
+    <button id="theme" class="theme">Theme</button>
     <header>
-        <h1>Weatherly</h1>
+        <h1 id="brand">Weatherly</h1>
         <nav>
             <a href="#login">Login</a>
             <a href="#signup">Signup</a>
@@ -20,14 +21,32 @@
     </header>
 
     <main id="main-content">
-        <section id="user1">
-            <h2>Current Weather</h2>
-            <div id="weather-display"></div>
+        <section id="intro" class="fade-in">
+            <h2 id="greeting">Welcome to Weatherly</h2>
+            <p id="subtitle">Where Weather Meets Wonder</p>
+            <p class="pragraph1">Step into a realm where weather transforms into an adventure! At Weatherly, modern design meets
+                innovative technology to bring you a sleek, interactive weather experience that feels as warm and
+                familiar as an old friend’s greeting.</p>
+            <p class="pragraph2">From the moment you land on our site, you’re welcomed by a personalized message that taps into your exact
+                location, instantly setting the stage with dynamic, real-time forecasts that pop and dance on your
+                screen. It’s not just about knowing whether to carry an umbrella; it’s about experiencing the magic of
+                weather tailored to you.</p>
+            <p class="pragraph3">Craving a more personal touch? Our state-of-the-art voice command feature lets you chat with the weather.
+                Simply ask, “What should I wear today?” and our smart assistant will serve up customized clothing
+                recommendations that match your local vibe—whether you need to layer up for a brisk breeze or enjoy a
+                sunny stroll in style.</p>
+            <p class="pragraph4">Immerse yourself in Weatherly’s world where every update is a conversation, every forecast an invitation
+                to explore, and every feature is designed with you in mind. With a blend of technology, style, and
+                personalized insights, Weatherly isn’t just another website—it’s your ultimate weather companion,
+                sparking excitement and empowering your daily adventures.</p>
         </section>
 
-        <section id="user2">
-            <h2>A grils using Weatherly Website</h2>
-            <div id="forecast-display"></div>
+        <section id="image-section" class="fade-in">
+            <img src="#" alt="Weather Image" id="weather-image">
+            <div id="image-text">
+                <h2>Weatherly</h2>
+                <p>Your ultimate weather companion.</p>
+            </div>
         </section>
     </main>
 
