@@ -1,18 +1,4 @@
-/*Global*/
-:root {
-    --primary-dark: #0f172a;
-    --secondary-dark: #1e293b;
-    --accent-blue: #3b82f6;
-    --accent-purple: #8b5cf6;
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --success: #22c55e;
-    --warning: #f59e0b;
-    --error: #ef4444;
-    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    --accent-gold: #ffd700;
-}
-
+/* Reset and base styles */
 * {
     margin: 0;
     padding: 0;
@@ -20,169 +6,129 @@
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    background: var(--primary-dark);
-    color: var(--text-primary);
-    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    transition: background-color 0.3s, color 0.3s;
 }
 
-/*Header & Navigation*/
+/* Dark mode styles */
+body.dark-mode {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+/* Header styles */
 header {
-    background: var(--secondary-dark);
-    padding: 20px;
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #f8f9fa;
+}
+
+.dark-mode header {
+    background-color: #2d2d2d;
+}
+
+.logo img {
+    height: 40px;
 }
 
 .nav-bar {
-    color: var(--text-primary);
-    text-decoration: none;
-    font-size: 16px;
-    padding: 10px 20px;
-    border-radius: 5px;
-    transition: background 0.3s ease;
-}
-
-.nav-bar:hover {
-    background: var(--accent-blue);
-    color: var(--text-primary);
-}
-
-/*Branding & Theme*/
-#brand {
-    font-size: 24px;
-    font-weight: bold;
-    color: var(--text-primary);
     display: flex;
+    gap: 1rem;
 }
 
-#theme {
-    background: transparent;
-    color: var(--text-primary);
-    border: 1px solid var(--text-primary);
-    padding: 8px 16px;
-    border-radius: 5px;
+.nav-bar button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    background-color: #007bff;
 }
 
-#theme:hover {
-    background: var(--text-primary);
-    color: var(--primary-dark);
-}
-
-/*Navigation Buttons */
-#Login, #Signup, #About {
-    background: transparent;
-    border: 1px solid var(--text-primary);
-    padding: 8px 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-#Login a, #Signup a, #About a {
-    color: var(--text-primary);
+.nav-bar button a {
+    color: white;
     text-decoration: none;
 }
 
-#Login:hover, #Signup:hover, #About:hover {
-    background: var(--text-primary);
-}
-
-#Login:hover a, #Signup:hover a, #About:hover a {
-    color: var(--primary-dark);
-}
-
-/*Main Content*/
+/* Main content styles */
 .main-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 40px 20px;
-    gap: 30px;
-}
-
-/*Intro Section*/
-#intro {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-#greeting {
-    font-size: 2.5rem;
-    margin-bottom: 15px;
-    color: var(--accent-gold);
-}
-
-#subtitle {
-    font-size: 1.2rem;
-    color: var(--text-secondary);
-}
-
-/*Image Section*/
-#image-section {
-    width: 100%;
     max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
     text-align: center;
+}
+
+#intro {
+    margin-bottom: 2rem;
 }
 
 #weather-image {
     max-width: 100%;
     height: auto;
-    margin-bottom: 30px;
-    border-radius: 10px;
-    box-shadow: var(--card-shadow);
+    margin: 2rem 0;
 }
 
-/*Typography*/
-.headline {
-    font-size: 48px;
-    font-weight: bold;
-    margin-bottom: 40px;
+/* CTA section styles */
+.cta-section {
+    margin: 2rem 0;
 }
 
-/*Buttons*/
-.btn {
-    background: transparent;
-    color: white;
-    border: 1px solid white;
-    padding: 15px 20px;
-    font-size: 16px;
-    cursor: pointer;
+.buttons {
     display: flex;
-    align-items: center;
     justify-content: center;
-    min-width: 180px;
-    transition: all 0.3s ease;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
 }
 
-.btn.arrow {
-    font-size: 24px;
-    width: 50px;
+.buttons p {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #007bff;
 }
 
-.btn img {
-    width: 120px;
-    height: auto;
-}
-
-.btn:hover {
-    background: white;
-    color: black;
-}
-
-.btn.google-play, .btn.app-store {
-    background: transparent;
+.buttons button {
+    background: none;
     border: none;
-    padding: 0;
-    min-width: auto;
+    cursor: pointer;
+    transition: transform 0.2s;
 }
 
-.btn.google-play:hover, .btn.app-store:hover {
-    background: transparent;
+.buttons button:hover {
     transform: scale(1.05);
+}
+
+.app-store img,
+.google-play img {
+    height: 40px;
+    width: auto;
+}
+
+/* Footer styles */
+footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.dark-mode footer {
+    background-color: #2d2d2d;
+}
+
+/* Theme button styles */
+.theme-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.theme-button img {
+    width: 24px;
+    height: 24px;
 }

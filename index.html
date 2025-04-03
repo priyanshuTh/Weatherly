@@ -8,8 +8,8 @@
     <meta name="description" content="Weatherly - Your personal weather companion">
     
     <!-- Title & Favicon -->
-    <title id="title">Weatherly</title>
-    <link rel="icon" type="image/png" href="/assets/images/Icon.png" sizes="16x16">
+    <title>Weatherly</title>
+    <link rel="icon" type="image/png" href="assets/images/logo.png" sizes="16x16">
     
     <!-- Stylesheets -->
     <link rel="stylesheet" href="css/style.css">
@@ -23,23 +23,19 @@
     <header>
         <!-- Logo and Brand -->
         <div class="logo">
-            <img src="logo.png" alt="Weatherly Logo" id="logo">
+            <img src="assets/images/logo.png" alt="Weatherly Logo" id="logo">
         </div>
-        <h1 id="brand">Weatherly</h1>
+        <h1>Weatherly</h1>
         
         <!-- Navigation -->
         <nav class="nav-bar">
-            <button id="Login" aria-label="Login">
-                <a href="#login">Login</a>
-            </button>
-            <button id="Signup" aria-label="Sign up">
-                <a href="#signup">Signup</a>
-            </button>
-            <button id="About" aria-label="About">
-                <a href="pages/about.html">About</a>
-            </button>
+            <button id="Login"><a href="#login">Login</a></button>
+            <button id="Signup"><a href="#signup">Signup</a></button>
+            <button id="About"><a href="pages/about.html">About</a></button>
         </nav>
-        <button id="theme" aria-label="Toggle theme">Theme</button>
+        <button id="theme" class="theme-button">
+            <img src="assets/images/light-mode.png" alt="Switch to Dark Mode" id="themeicon">
+        </button>
     </header>
 
     <!-- Main Content -->
@@ -52,27 +48,25 @@
         
         <!-- Weather Image Section -->
         <section id="image-section" class="fade-in">
-            <img src="#" alt="Weather Image" id="weather-image">
+            <img src="assets/images/weather-default.jpg" alt="Weather Illustration" id="weather-image">
         </section>
 
         <!-- Call to Action Section -->
         <section class="cta-section">
             <div class="buttons">
-                <button class="btn primary-btn" aria-label="Get started">Let's make your day</button>
-                <button class="btn arrow" aria-label="Next">&#8594;</button>
-                <button class="btn app-store" aria-label="Download on App Store">
-                    <img src="app-store.png" alt="App Store">
+                <p>Let's make your day</p>
+                <button class="app-store">
+                    <img src="assets/images/App-store.png" alt="Download on App Store">
                 </button>
-                <button class="btn arrow" aria-label="Next">&#8594;</button>
-                <button class="btn google-play" aria-label="Get it on Google Play">
-                    <img src="google-play.png" alt="Google Play">
+                <button class="google-play">
+                    <img src="assets/images/Google-Play.png" alt="Get it on Google Play">
                 </button>
             </div>
         </section>
     </main>
 
     <!-- Footer -->
-    <footer id="contact">
+    <footer>
         <p>&copy; 2025 Weatherly. All rights reserved.</p>
     </footer>
 
