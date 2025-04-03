@@ -1,4 +1,134 @@
-/* Reset and base styles */
+:root {
+    --transition-duration: 0.5s;
+    --animation-delay-step: 0.15s;
+}
+
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity var(--transition-duration) ease, visibility var(--transition-duration) ease;
+    pointer-events: none;
+}
+
+.dark-mode .preloader {
+    background: #1a1a1a;
+}
+
+#preloader-image {
+    width: 150px;
+    height: auto;
+    margin-bottom: 1rem;
+}
+
+.loader {
+    border: 5px solid rgba(243, 243, 243, 0.3);
+    border-top: 5px solid #007bff;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.loader::after {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    border: 3px solid rgba(0, 123, 255, 0.1);
+    border-radius: 50%;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); opacity: 1; }
+    100% { transform: rotate(360deg); opacity: 0.8; }
+}
+
+.preloader p {
+    color: #007bff;
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-top: 1rem;
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out 0.5s forwards;
+}
+
+.dark-mode .preloader p {
+    color: #ffffff;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+body.loaded .preloader {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Enhanced content animations */
+.main-content {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity var(--transition-duration) ease, transform var(--transition-duration) ease;
+}
+
+body.loaded .main-content {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Staggered animations for sections */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity var(--transition-duration) ease, transform var(--transition-duration) ease;
+}
+
+body.loaded #intro {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: calc(var(--animation-delay-step) * 1);
+}
+
+body.loaded #image-section {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: calc(var(--animation-delay-step) * 2);
+}
+
+body.loaded .cta-section {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: calc(var(--animation-delay-step) * 3);
+}
+
+/* Add this to your existing .buttons styles */
+.buttons {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity var(--transition-duration) ease, transform var(--transition-duration) ease;
+    transition-delay: calc(var(--animation-delay-step) * 4);
+}
+
+body.loaded .buttons {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 * {
     margin: 0;
     padding: 0;
