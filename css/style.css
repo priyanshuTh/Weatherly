@@ -1,0 +1,188 @@
+/*Global*/
+:root {
+    --primary-dark: #0f172a;
+    --secondary-dark: #1e293b;
+    --accent-blue: #3b82f6;
+    --accent-purple: #8b5cf6;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --accent-gold: #ffd700;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--primary-dark);
+    color: var(--text-primary);
+    min-height: 100vh;
+}
+
+/*Header & Navigation*/
+header {
+    background: var(--secondary-dark);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-bar {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.nav-bar:hover {
+    background: var(--accent-blue);
+    color: var(--text-primary);
+}
+
+/*Branding & Theme*/
+#brand {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--text-primary);
+    display: flex;
+}
+
+#theme {
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--text-primary);
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#theme:hover {
+    background: var(--text-primary);
+    color: var(--primary-dark);
+}
+
+/*Navigation Buttons */
+#Login, #Signup, #About {
+    background: transparent;
+    border: 1px solid var(--text-primary);
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#Login a, #Signup a, #About a {
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+#Login:hover, #Signup:hover, #About:hover {
+    background: var(--text-primary);
+}
+
+#Login:hover a, #Signup:hover a, #About:hover a {
+    color: var(--primary-dark);
+}
+
+/*Main Content*/
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    gap: 30px;
+}
+
+/*Intro Section*/
+#intro {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+#greeting {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: var(--accent-gold);
+}
+
+#subtitle {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+}
+
+/*Image Section*/
+#image-section {
+    width: 100%;
+    max-width: 1200px;
+    text-align: center;
+}
+
+#weather-image {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 30px;
+    border-radius: 10px;
+    box-shadow: var(--card-shadow);
+}
+
+/*Typography*/
+.headline {
+    font-size: 48px;
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+/*Buttons*/
+.btn {
+    background: transparent;
+    color: white;
+    border: 1px solid white;
+    padding: 15px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 180px;
+    transition: all 0.3s ease;
+}
+
+.btn.arrow {
+    font-size: 24px;
+    width: 50px;
+}
+
+.btn img {
+    width: 120px;
+    height: auto;
+}
+
+.btn:hover {
+    background: white;
+    color: black;
+}
+
+.btn.google-play, .btn.app-store {
+    background: transparent;
+    border: none;
+    padding: 0;
+    min-width: auto;
+}
+
+.btn.google-play:hover, .btn.app-store:hover {
+    background: transparent;
+    transform: scale(1.05);
+}
