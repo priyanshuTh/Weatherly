@@ -31,7 +31,6 @@ function initializeTheme() {
 // Preload images for better performance
 function preloadImages() {
     const images = [
-        'assets/images/weather-default.jpg',
         'assets/images/light-mode.png',
         'assets/images/dark-mode.png',
         'assets/images/App-store.png',
@@ -51,7 +50,7 @@ function preloadImages() {
 
 // Handle preloader with improved timing
 function handlePreloader() {
-    const minDisplayTime = 2000; // 2 seconds minimum display time
+    const minDisplayTime = 1000; // 2 seconds minimum display time
     const startTime = Date.now();
     
     // Start preloading images

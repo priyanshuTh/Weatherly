@@ -1,4 +1,6 @@
 :root {
+    --header-bg-color: #2958d796;
+    --header-bg-color-dark: #2d2d2d;
     --transition-duration: 0.5s;
     --animation-delay-step: 0.15s;
 }
@@ -9,7 +11,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: #f8f9fa;
+    background: #ffffff;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -24,7 +26,7 @@
 }
 
 #preloader-image {
-    width: 150px;
+    width: auto;
     height: auto;
     margin-bottom: 1rem;
 }
@@ -79,23 +81,85 @@ body.loaded .preloader {
     visibility: hidden;
 }
 
-/* Enhanced content animations */
-.main-content {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity var(--transition-duration) ease, transform var(--transition-duration) ease;
+/* Header styles */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: var(--header-bg-color);
+    width: 100%;
+    height: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    transition: background-color var(--transition-duration) ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-body.loaded .main-content {
-    opacity: 1;
-    transform: translateY(0);
+.header-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+.header-button img {
+    width: 24px;
+    height: 24px;
 }
 
-/* Staggered animations for sections */
-.fade-in {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity var(--transition-duration) ease, transform var(--transition-duration) ease;
+.header-left{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background-color: transparent;
+}
+
+.brand-name {
+    margin: 10px;;
+    padding: auto;
+    
+    color: rgba(0, 0, 0, 0);
+}
+
+.dark-mode .brand-name {
+    color: #ffffff;
+}
+
+.header-right{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.dark-mode header {
+    background-color: #2d2d2d;
+}
+
+.logo img {
+    height: 60px;
+    width: 60px;
+    opacity:1;
+    transition: opacity var(--transition-duration) ease;
+}
+
+.nav-bar {
+    display: flex;
+    gap: 1rem;
+}
+
+.nav-bar button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #007bff;
+}
+
+.nav-bar button a {
+    color: white;
+    text-decoration: none;
 }
 
 body.loaded #intro {
@@ -114,14 +178,6 @@ body.loaded .cta-section {
     opacity: 1;
     transform: translateY(0);
     transition-delay: calc(var(--animation-delay-step) * 3);
-}
-
-/* Add this to your existing .buttons styles */
-.buttons {
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity var(--transition-duration) ease, transform var(--transition-duration) ease;
-    transition-delay: calc(var(--animation-delay-step) * 4);
 }
 
 body.loaded .buttons {
@@ -147,39 +203,16 @@ body.dark-mode {
     color: #ffffff;
 }
 
-/* Header styles */
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    background-color: #f8f9fa;
+body.loaded .main-content {
+    opacity: 1;
+    transform: translateY(0);
 }
 
-.dark-mode header {
-    background-color: #2d2d2d;
-}
-
-.logo img {
-    height: 40px;
-}
-
-.nav-bar {
-    display: flex;
-    gap: 1rem;
-}
-
-.nav-bar button {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    background-color: #007bff;
-}
-
-.nav-bar button a {
-    color: white;
-    text-decoration: none;
+/* Staggered animations for sections */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity var(--transition-duration) ease, transform var(--transition-duration) ease;
 }
 
 /* Main content styles */
@@ -188,6 +221,9 @@ header {
     margin: 0 auto;
     padding: 2rem;
     text-align: center;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity var(--transition-duration) ease, transform var(--transition-duration) ease;
 }
 
 #intro {
@@ -211,6 +247,10 @@ header {
     align-items: center;
     gap: 2rem;
     flex-wrap: wrap;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity var(--transition-duration) ease, transform var(--transition-duration) ease;
+    transition-delay: calc(var(--animation-delay-step) * 4);
 }
 
 .buttons p {
@@ -230,10 +270,9 @@ header {
     transform: scale(1.05);
 }
 
-.app-store img,
-.google-play img {
-    height: 40px;
-    width: auto;
+.app-store img,.google-play img {
+    height: 250px;
+    width: 250px;
 }
 
 /* Footer styles */

@@ -17,33 +17,40 @@
     <link rel="stylesheet" href="css/style.css">
     
     <!-- Scripts -->
-    <script src="js/script.js" defer></script>
+    <script src="js/script.js" defer></script>   
 </head>
 
 <body>
     <!-- Preloader -->
     <div class="preloader">
+        <img src="assets/images/weatherlygif.gif" alt="Loading..." id="preloader-image">
         <div class="loader"></div>
-        <img src="assets/images/weatherlygif.gif" alt="loading" id="preloader-image">
+        <p>Loading your weather companion...</p>
     </div>
 
     <!-- Header Section -->
     <header>
-        <!-- Logo and Brand -->
-        <div class="logo">
-            <img src="assets/images/logo.png" alt="Weatherly Logo" id="logo">
-        </div>
-        <h1>Weatherly</h1>
+        <button id="logo-button" class="header-button" onclick="window.location.href='index.html'">
+            <!-- Logo and Brand -->
+         <section class="header-left">
+            <div class="logo">
+                <img src="assets/images/logo.png" alt="Weatherly Logo" id="logo">
+            </div>
+            <h1 id="brand-name">Weatherly</h1>
+         </section>
+        </button>
         
         <!-- Navigation -->
-        <nav class="nav-bar">
-            <button id="Login"><a href="#login">Login</a></button>
-            <button id="Signup"><a href="#signup">Signup</a></button>
-            <button id="About"><a href="pages/about.html">About</a></button>
-        </nav>
-        <button id="theme" class="theme-button">
-            <img src="assets/images/light-mode.png" alt="Switch to Dark Mode" id="themeicon">
-        </button>
+        <section class="header-right">
+            <nav class="nav-bar">
+                <button id="Login"><a href="#login">Login</a></button>
+                <button id="Signup"><a href="#signup">Signup</a></button>
+                <button id="About"><a href="pages/about.html">About</a></button>
+            </nav>
+            <button id="theme" class="theme-button">
+                <img src="assets/images/light-mode.png" alt="Switch to Dark Mode" id="themeicon">
+            </button>
+        </section>
     </header>
 
     <!-- Main Content -->
@@ -64,10 +71,14 @@
             <div class="buttons">
                 <p>Let's make your day</p>
                 <button class="app-store">
-                    <img src="assets/images/App-store.png" alt="Download on App Store">
+                    <a href="http://apps.apple.com" traget="_blank">
+                        <img src="assets/images/App-store.png" alt="Download on App Store">
+                    </a>
                 </button>
                 <button class="google-play">
-                    <img src="assets/images/Google-Play.png" alt="Get it on Google Play">
+                    <a href="http://play.google.com" traget="_blank">
+                        <img src="assets/images/Google-play.png" alt="Get it on Google Play">
+                    </a>
                 </button>
             </div>
         </section>
