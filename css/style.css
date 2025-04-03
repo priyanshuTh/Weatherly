@@ -22,7 +22,7 @@
 }
 
 .dark-mode .preloader {
-    background: #1a1a1a;
+    background: #000000;
 }
 
 #preloader-image {
@@ -119,7 +119,6 @@ header {
 .brand-name {
     margin: 10px;;
     padding: auto;
-    
     color: rgba(0, 0, 0, 0);
 }
 
