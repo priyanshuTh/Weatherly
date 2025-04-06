@@ -18,7 +18,16 @@
        
 </head>
 
-<body> 
+<body>
+    <!-- Background Video -->
+    <div class="video-container">
+        <video autoplay muted loop id="bgVideo">
+            <source src="assets/videos/video1.mp4" type="video/mp4">
+            Your browser does not support HTML5 video.
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+
     <!-- Preloader -->
     <div class="preloader">
         <img src="assets/images/preload-light.gif" alt="Loading..." id="preloader-image">
@@ -58,29 +67,25 @@
             <h2 id="greeting">Welcome to Weatherly</h2>
             <p id="subtitle">Where Weather Meets Wonder</p>
         </section>
-        
-        <!-- Weather Image Section -->
-        <section id="image-section" class="fade-in">
-            <img src="assets/images/weather-default.jpg" alt="Weather Illustration" id="weather-image">
-        </section>
-
-        <!-- Call to Action Section -->
-        <section class="cta-section">
-            <div class="buttons">
-                <p>Let's make your day</p>
-                <button class="app-store">
-                    <a href="http://apps.apple.com" traget="_blank">
-                        <img src="assets/images/App-store.png" alt="Download on App Store">
-                    </a>
-                </button>
-                <button class="google-play">
-                    <a href="http://play.google.com" traget="_blank">
-                        <img src="assets/images/Google-play.png" alt="Get it on Google Play">
-                    </a>
-                </button>
-            </div>
-        </section>
     </main>
+
+    <!-- app download section -->
+    <section class="cta-corner">
+        <div class="corner-content">
+            <h2 class="corner-text"> Your AI weather buddy,<br>anytime, anywhere</h2>
+            <p class="corner-subtext">Get instant weather updates and smart forecasts</p>
+            <div class="corner-buttons">
+                <a href="http://apps.apple.com" target="_blank" class="store-btn">
+                    <img src="assets/images/App-store.png" alt="App Store">
+                    <span class="btn-label">Download on the<br>App Store</span>
+                </a>
+                <a href="http://play.google.com" target="_blank" class="store-btn">
+                    <img src="assets/images/Google-play.png" alt="Google Play">
+                    <span class="btn-label">Get it on<br>Google Play</span>
+                </a>
+            </div>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer>

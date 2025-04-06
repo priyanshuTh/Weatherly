@@ -1,3 +1,39 @@
+// Background video functionality
+function initBackgroundVideo() {
+    const video = document.getElementById('bgVideo');
+    const videos = [
+        'assets/videos/video1.mp4',
+        'assets/videos/video2.mp4',
+        'assets/videos/video3.mp4'
+    ];
+    let currentVideo = 0;
+
+    // Preload all videos
+    videos.forEach(src => {
+        const vid = document.createElement('video');
+        vid.src = src;
+        vid.style.display = 'none';
+        document.body.appendChild(vid);
+    });
+
+    // Switch videos on end
+    video.addEventListener('ended', () => {
+        video.style.opacity = 0;
+        setTimeout(() => {
+            currentVideo = (currentVideo + 1) % videos.length;
+            video.src = videos[currentVideo];
+            video.play();
+            video.style.opacity = 1;
+        }, 500);
+    });
+
+    // Start with random video
+    currentVideo = Math.floor(Math.random() * videos.length);
+    video.src = videos[currentVideo];
+    video.style.opacity = 0;
+    setTimeout(() => video.style.opacity = 1, 500);
+}
+
 // DOM Elements
 const themeToggle = document.getElementById('theme');
 const themeIcon = document.getElementById('themeicon');
@@ -121,10 +157,27 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeTheme();
     handlePreloader();
     setGreeting();
+    initBackgroundVideo();
     
     // Theme toggle button
     themeToggle.addEventListener('click', () => {
         toggleTheme();
         localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+    });
+});
+
+// Header scroll effect
+window.addEventListener('scroll', () => {
+    const header = document.querySelector('header');
+    header.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Smooth scroll for navigation
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
     });
 });
