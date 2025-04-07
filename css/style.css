@@ -1,0 +1,114 @@
+@import url('https://cdn.tailwindcss.com');
+
+body {
+    background: linear-gradient(to right, #f7f7f7, #d1d5db);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+}
+
+.logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 16px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #4b5563;
+}
+
+.login-box {
+    background: white;
+    padding: 32px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px 40px;
+    border: 1px solid #ccc;
+    border-radius: 50px;
+    background: #f3f4f6;
+    color: #374151;
+    outline: none;
+    transition: 0.3s;
+}
+
+.input-group input:focus {
+    border-color: #9ca3af;
+    box-shadow: 0 0 5px rgba(156, 163, 175, 0.5);
+}
+
+.icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+}
+
+.icon.right {
+    right: 12px;
+    left: auto;
+    cursor: pointer;
+}
+
+.options {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 16px;
+}
+
+.options a {
+    text-decoration: none;
+    color: #6b7280;
+}
+
+.btn {
+    width: 100%;
+    padding: 10px;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.login-btn {
+    background: black;
+    color: white;
+    border: none;
+}
+
+.signup-btn {
+    background: #e5e7eb;
+    color: #6b7280;
+    border: none;
+}
+
+.divider {
+    color: #6b7280;
+    margin: 16px 0;
+}
