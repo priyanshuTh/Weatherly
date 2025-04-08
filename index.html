@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Weatherly - Your personal weather companion">
+    <meta name="theme-color" content="#007bff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Title & Favicon -->
+    <title>Weatherly</title>
+    <link rel="icon" type="image/png" href="assets/images/logo.png" sizes="16x16">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+       
+</head>
+
+<body>
+    <!-- Background Video -->
+    <div class="video-container">
+        <video autoplay muted loop id="bgVideo">
+            <source src="assets/videos/video1.mp4" type="video/mp4">
+            Your browser does not support HTML5 video.
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <img src="assets/images/preload-light.gif" alt="Loading..." id="preloader-image">
+        <div class="loader"></div>
+        <p><b>Loading your weather companion...</b></p>
+    </div>
+
+    <!-- Header Section -->
+    <header>
+        <button id="logo-button" class="header-button" onclick="window.location.href='index.html'">
+            <!-- Logo and Brand -->
+         <section class="header-left">
+            <div class="logo">
+                <img src="assets/imag  es/logo.png" alt="Weatherly Logo" id="logo">
+            </div>
+            <h1 id="brand-name">Weatherly</h1>
+         </section>
+        </button>
+        
+        <!-- Navigation -->
+        <section class="header-right">
+            <nav class="nav-bar">
+                <button id="Login"><a href="#login">Login</a></button>
+                <button id="Signup"><a href="#signup">Signup</a></button>
+                <button id="About"><a href="pages/about.html">About</a></button>
+            </nav>
+            <button id="theme" class="theme-button">
+                <img src="assets/images/light-mode.png" alt="Switch to Dark Mode" id="themeicon">
+            </button>
+        </section>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Introduction Section -->
+        <section id="intro" class="fade-in">
+            <h2 id="greeting">Welcome to Weatherly</h2>
+            <p id="subtitle">Where Weather Meets Wonder</p>
+        </section>
+    </main>
+
+    <!-- app download section -->
+    <section class="cta-corner">
+        <div class="corner-content">
+            <h2 class="corner-text"> Your AI weather buddy,<br>anytime, anywhere</h2>
+            <p class="corner-subtext">Get instant weather updates and smart forecasts</p>
+            <div class="corner-buttons">
+                <a href="http://apps.apple.com" target="_blank" class="store-btn">
+                    <img src="assets/images/App-store.png" alt="App Store">
+                    <span class="btn-label">Download on the<br>App Store</span>
+                </a>
+                <a href="http://play.google.com" target="_blank" class="store-btn">
+                    <img src="assets/images/Google-play.png" alt="Google Play">
+                    <span class="btn-label">Get it on<br>Google Play</span>
+                </a>''
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Weatherly. All rights reserved.</p>
+    </footer>
+    <!-- JavaScript -->
+    <script src="js/script.js"></script>
+</body>
+</html>
