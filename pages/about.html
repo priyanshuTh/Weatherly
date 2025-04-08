@@ -1,13 +1,191 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Weatherly</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            background-color: #f0f4f8;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .about-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(171, 133, 133, 0.1);
+            margin-bottom: 40px;
+        }
+
+        .pragraph1, .pragraph2, .pragraph3, .pragraph4 {
+            font-size: 1.1rem;
+            color: #34495e;
+            margin-bottom: 25px;
+            line-height: 1.8;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+
+        .value-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .value-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .value-card h3 {
+            color: #2980b9;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .value-card p {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+        }
+
+        .contact-section {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .contact-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: #2980b9;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .contact-btn:hover {
+            background: #3498db;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .about-content {
+                padding: 25px;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>#About</h1>
+        <div class="container">
+            <h1>About Weatherly</h1>
+        </div>
     </header>
+
+    <main>
+        <div class="container">
+            <div class="about-content">
+                <p class="pragraph1">Step into a realm where weather transforms into an adventure! At Weatherly, modern design meets
+                    innovative technology to bring you a sleek, interactive weather experience that feels as warm and
+                    familiar as an old friend’s greeting.</p>
+                <p class="pragraph2">From the moment you land on our site, you’re welcomed by a personalized message that taps into your exact
+                    location, instantly setting the stage with dynamic, real-time forecasts that pop and dance on your
+                    screen. It’s not just about knowing whether to carry an umbrella; it’s about experiencing the magic of
+                    weather tailored to you.</p>
+                <p class="pragraph3">Craving a more personal touch? Our state-of-the-art voice command feature lets you chat with the weather.
+                    Simply ask, “What should I wear today?” and our smart assistant will serve up customized clothing
+                    recommendations that match your local vibe—whether you need to layer up for a brisk breeze or enjoy a
+                    sunny stroll in style.</p>
+                <p class="pragraph4">Immerse yourself in Weatherly’s world where every update is a conversation, every forecast an invitation
+                    to explore, and every feature is designed with you in mind. With a blend of technology, style, and
+                    personalized insights, Weatherly isn’t just another website—it’s your ultimate weather companion,
+                    sparking excitement and empowering your daily adventures.</p>
+            </div>
+
+            <div class="values-grid">
+                <div class="value-card">
+                    <h3>INNOVATIVE</h3>
+                    <p>We focus on bringing unique and forward-thinking ideas to life.</p>
+                </div>
+                <div class="value-card">
+                    <h3>USER-CENTRIC</h3>
+                    <p>Our products are designed with the user in mind, prioritizing usability.</p>
+                </div>
+                <div class="value-card">
+                    <h3>SEAMLESS ACCCESS</h3>
+                    <p>Stay updated about the weather anywhere anytime</p>
+                   
+                <div class="value-card">
+                    <h3>CUTTING-EDGE</h3>
+                    <p>Utilizing the latest technologies, we stay ahead of the curve.</p>
+                </div>
+            </div>
+
+            <div class="contact-section">
+                <h2>GET IN TOUCH</h2>
+                <a href="#" class="contact-btn">Contact Us</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Add scroll animation for value cards
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        document.querySelectorAll('.value-card').forEach((card) => {
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.6s ease-out';
+            observer.observe(card);
+        });
+
+        // Smooth scroll for contact button
+        document.querySelector('.contact-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            // Add your contact form logic here
+            console.log('Contact button clicked');
+            alert('Thank you for your interest! Our contact form will be available soon.');
+        });
+    </script>
 </body>
 </html>
