@@ -1,20 +1,25 @@
 @import url('https://cdn.tailwindcss.com');
 
 body {
-    background: linear-gradient(to right, #f7f7f7, #d1d5db);
+    background: linear-gradient(to right, #f7f7f7, #d1d5db); /* Nice gradient */
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: Arial, sans-serif;
+    margin: 0; /* Added to remove default margin */
 }
 
+/* Centered container */
 .container {
     position: relative;
     width: 100%;
     max-width: 400px;
+    padding: 20px; /* Added padding for small screens */
+    box-sizing: border-box; /* Ensures padding doesn’t exceed container width */
 }
 
+/* Brand/logo area */
 .logo {
     position: absolute;
     top: 0;
@@ -25,55 +30,68 @@ body {
     color: #4b5563;
 }
 
+/* Main login box */
 .login-box {
     background: white;
     padding: 32px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
+    position: relative;
+    z-index: 1; /* Ensures it appears above .logo if needed */
 }
 
+/* Headline text */
 h2 {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 16px;
+    color: #111827; /* Slightly darker for better contrast */
 }
 
+/* Input field wrapper */
 .input-group {
     position: relative;
     margin-bottom: 16px;
 }
 
+/* Styled input fields */
 .input-group input {
     width: 100%;
-    padding: 10px 40px;
+    padding: 10px 40px; /* Enough space for icons */
     border: 1px solid #ccc;
     border-radius: 50px;
     background: #f3f4f6;
     color: #374151;
     outline: none;
     transition: 0.3s;
+    box-sizing: border-box; /* Makes padding consistent */
 }
 
+/* On focus */
 .input-group input:focus {
     border-color: #9ca3af;
     box-shadow: 0 0 5px rgba(156, 163, 175, 0.5);
 }
 
+/* Icon positioning */
 .icon {
     position: absolute;
     left: 12px;
     top: 50%;
     transform: translateY(-50%);
     color: #9ca3af;
+    pointer-events: none; /* Prevents blocking clicks */
 }
 
 .icon.right {
     right: 12px;
     left: auto;
     cursor: pointer;
+    pointer-events: auto; /* Allows click on visibility toggle, etc. */
 }
 
+/* Options section (Remember me / Forgot password) */
 .options {
     display: flex;
     justify-content: space-between;
@@ -85,8 +103,14 @@ h2 {
 .options a {
     text-decoration: none;
     color: #6b7280;
+    transition: color 0.2s;
 }
 
+.options a:hover {
+    color: #374151; /* Slight hover effect for better UX */
+}
+
+/* Button base style */
 .btn {
     width: 100%;
     padding: 10px;
@@ -94,21 +118,51 @@ h2 {
     font-size: 16px;
     cursor: pointer;
     transition: 0.3s;
+    border: none;
 }
 
+/* Primary login button */
 .login-btn {
     background: black;
     color: white;
-    border: none;
 }
 
+.login-btn:hover {
+    background: #111827; /* Slight hover effect */
+}
+
+/* Sign up / secondary action */
 .signup-btn {
     background: #e5e7eb;
     color: #6b7280;
-    border: none;
 }
 
+.signup-btn:hover {
+    background: #d1d5db;
+}
+
+/* Divider line/text */
 .divider {
     color: #6b7280;
     margin: 16px 0;
+    position: relative;
+    text-align: center;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background: #d1d5db;
+}
+
+.divider::before {
+    left: 0;
+}
+
+.divider::after {
+    right: 0;
 }
