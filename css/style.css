@@ -260,7 +260,7 @@ body:not(.dark-mode) .recent-searches .list-group-item {
 
 /* Active states */
 .preloader.active img {
-    transform: scale(1.2) rotate(-15deg);
+    transform: scale(1.2) rotate(15deg);
 }
 
 .preloader.active h1 {
