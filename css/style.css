@@ -242,6 +242,36 @@ body:not(.dark-mode) .recent-searches .list-group-item {
     transition: opacity 0.5s ease;
 }
 
+.preloader img {
+    transform: scale(1);
+    transition: all 0.5s ease-in-out;
+}
+
+.preloader h1 {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease-out;
+}
+
+.preloader .text-muted {
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+}
+
+/* Active states */
+.preloader.active img {
+    transform: scale(1.2) rotate(-15deg);
+}
+
+.preloader.active h1 {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.preloader.active .text-muted {
+    opacity: 1;
+}
+
 body.dark-mode .preloader {
     background-color: var(--dark-bg);
 }
