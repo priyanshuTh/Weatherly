@@ -4,7 +4,7 @@ $(document).ready(function() {
         e.preventDefault();
         window.location.reload();
     });
-    
+
     // Preloader Handling
     setTimeout(function() {
         $('.preloader').fadeOut(500);
@@ -50,6 +50,40 @@ $(document).ready(function() {
         localStorage.setItem('theme', $('body').hasClass('dark-mode') ? 'dark' : 'light');
     });
 
+    // Determine current season and update hero background
+    function updateSeasonalBackground() {
+        const date = new Date();
+        const month = date.getMonth(); // 0-based (0 = January, 11 = December)
+        let season;
+        let backgroundImage;
+        
+        // Determine season based on Northern Hemisphere seasons
+        if (month >= 2 && month <= 4) {
+            season = 'spring';
+            backgroundImage = 'assets/images/spring-bg.jpg';
+        } else if (month >= 5 && month <= 7) {
+            season = 'summer';
+            backgroundImage = 'assets/images/summer-bg.jpg';
+        } else if (month >= 8 && month <= 10) {
+            season = 'autumn';
+            backgroundImage = 'assets/images/autumn-bg.jpg';
+        } else {
+            season = 'winter';
+            backgroundImage = 'assets/images/winter-bg.jpg';
+        }
+        
+        // Update hero section background
+        $('.hero-section').css('background-image', `url('${backgroundImage}')`);
+        
+        // Add a data attribute for potential additional styling
+        $('.hero-section').attr('data-season', season);
+        
+        console.log(`Season set to: ${season}`);
+    }
+
+    // Call the function to set initial seasonal background
+    updateSeasonalBackground();
+
     // Initialize Theme
     const savedTheme = localStorage.getItem('theme') || 'light';
     $('body').toggleClass('dark-mode', savedTheme === 'dark');
@@ -64,7 +98,7 @@ $(document).ready(function() {
         const location = $(this).find('input').val().trim();
         
         if(location) {
-            // Always add to recent searches since we're using necessary cookies
+            // Always add to recent searches
             addRecentSearch(location);
             $(this).find('input').val('');
             

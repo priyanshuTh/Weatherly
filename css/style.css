@@ -48,6 +48,22 @@ body {
     position: relative;
 }
 
+.hero-section[data-season="spring"] .hero-overlay {
+    background: linear-gradient(rgba(76, 175, 80, 0.6), rgba(0, 0, 0, 0.7));
+}
+
+.hero-section[data-season="summer"] .hero-overlay {
+    background: linear-gradient(rgba(255, 152, 0, 0.6), rgba(0, 0, 0, 0.7));
+}
+
+.hero-section[data-season="autumn"] .hero-overlay {
+    background: linear-gradient(rgba(121, 85, 72, 0.6), rgba(0, 0, 0, 0.7));
+}
+
+.hero-section[data-season="winter"] .hero-overlay {
+    background: linear-gradient(rgba(33, 150, 243, 0.6), rgba(0, 0, 0, 0.7));
+}
+
 .hero-overlay {
     background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7));
     padding: 5rem 0;
@@ -294,6 +310,18 @@ body.dark-mode .form-check-label {
 
 body.dark-mode .btn-close {
     filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Footer */
+footer .d-flex img {
+    transition: transform 0.3s ease;
+    width: 80px;
+    height: 80px;
+    margin: 0 1rem;
+}
+
+footer .d-flex img:hover {
+    transform: scale(1.1);
 }
 
 /* Responsive Design */
