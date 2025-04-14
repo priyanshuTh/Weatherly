@@ -90,6 +90,8 @@ $(document).ready(function() {
     
     if (savedTheme === 'dark') {
         $('#themeToggle i').removeClass('bi-moon-stars').addClass('bi-sun');
+        $('.preloader').css('background-color', '#1a1a1a');
+        $('.preloader .text-muted').css('color', '#adb5bd');
     }
 
     // Search Functionality

@@ -242,6 +242,14 @@ body:not(.dark-mode) .recent-searches .list-group-item {
     transition: opacity 0.5s ease;
 }
 
+body.dark-mode .preloader {
+    background-color: var(--dark-bg);
+}
+
+body.dark-mode .preloader .text-muted {
+    color: #adb5bd !important;
+}
+
 body.loaded .preloader {
     opacity: 0;
     visibility: hidden;
