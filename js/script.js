@@ -1,183 +1,186 @@
-// Background video functionality
-function initBackgroundVideo() {
-    const video = document.getElementById('bgVideo');
-    const videos = [
-        'assets/videos/video1.mp4',
-        'assets/videos/video2.mp4',
-        'assets/videos/video3.mp4'
-    ];
-    let currentVideo = 0;
-
-    // Preload all videos
-    videos.forEach(src => {
-        const vid = document.createElement('video');
-        vid.src = src;
-        vid.style.display = 'none';
-        document.body.appendChild(vid);
-    });
-
-    // Switch videos on end
-    video.addEventListener('ended', () => {
-        video.style.opacity = 0;
-        setTimeout(() => {
-            currentVideo = (currentVideo + 1) % videos.length;
-            video.src = videos[currentVideo];
-            video.play();
-            video.style.opacity = 1;
-        }, 500);
-    });
-
-    // Start with random video
-    currentVideo = Math.floor(Math.random() * videos.length);
-    video.src = videos[currentVideo];
-    video.style.opacity = 0;
-    setTimeout(() => video.style.opacity = 1, 500);
-}
-
-// DOM Elements
-const themeToggle = document.getElementById('theme');
-const themeIcon = document.getElementById('themeicon');
-const greeting = document.getElementById('greeting');
-
-// Theme state
-let isDarkMode = false;
-
-// Theme toggle functionality
-function toggleTheme() {
-    document.body.classList.toggle('dark-mode');
-    isDarkMode = !isDarkMode;
-    const preloaderImage = document.getElementById('preloader-image');
-    
-    // Update theme icon
-    themeIcon.src = isDarkMode ? 'assets/images/dark-mode.png' : 'assets/images/light-mode.png';
-    themeIcon.alt = isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode';
-    // Update preloader image
-    if (preloaderImage) {
-        preloaderImage.src = isDarkMode ? 'assets/images/preload-dark.gif' : 'assets/images/preload-light.gif';
-    }
-    //save theme preference
-    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-}
-
-// Initialize theme
-function initializeTheme() {
-    // Check for saved theme preference
-    const savedTheme = localStorage.getItem('theme');
-    const preloaderImage = document.getElementById('preloader-image');
-    if (savedTheme === 'dark') {
-        isDarkMode = true;
-        document.body.classList.add('dark-mode');
-        themeIcon.src = 'assets/images/dark-mode.png';
-        if (preloaderImage) {
-            preloaderImage.src = 'assets/images/preload-dark.gif';
-        }
-    } else {
-        if (preloaderImage) {
-            preloaderImage.src = 'assets/images/preload-light.gif';
-        }
-    }
-}
-
-// Preload images for better performance
-function preloadImages() {
-    const images = [
-        'assets/images/light-mode.png',
-        'assets/images/dark-mode.png',
-        'assets/images/App-store.png',
-        'assets/images/Google-Play.png',
-        'assets/images/preload-light.gif',
-        'assets/images/preload-dark.gif'
-    ];
-    
-    return Promise.all(images.map(src => {
-        return new Promise((resolve, reject) => {
-            const img = new Image();
-            img.onload = resolve;
-            img.onerror = reject;
-            img.src = src;
-        });
-    }));
-}
-
-// Handle preloader with improved timing
-function handlePreloader() {
-    const minDisplayTime = 1000; // 1 seconds minimum display time
-    const startTime = Date.now();
-    
-    // Start preloading images
-    preloadImages()
-        .then(() => {
-            const loadTime = Date.now() - startTime;
-            const remainingTime = Math.max(0, minDisplayTime - loadTime);
-            
-            setTimeout(() => {
-                document.body.classList.add('loaded');
-                
-                // Remove preloader from DOM after transition
-                setTimeout(() => {
-                    const preloader = document.querySelector('.preloader');
-                    if (preloader) {
-                        preloader.style.display = 'none';
-                    }
-                }, 500);
-            }, minDisplayTime);
-        })
-        .catch(error => {
-            console.warn('Some images failed to load:', error);
-            // Still remove preloader even if some images fail
-            document.body.classList.add('loaded');
-            const preloader = document.querySelector('preloader');
-            if (preloader) {
-                preloader.style.display = 'none';
-                preloader.remove();
-            }
-        });
-}
-
-// Add a greeting based on time of day
-function setGreeting() {
-    const hour = new Date().getHours();
-    let greetingText = 'Welcome to Weatherly';
-    
-    if (hour < 12) {
-        greetingText = 'Good Morning with Weatherly';
-    } else if (hour < 18) {
-        greetingText = 'Good Afternoon with Weatherly';
-    } else {
-        greetingText = 'Good Evening with Weatherly';
-    }
-    
-    if (greeting) {
-        greeting.textContent = greetingText;
-    }
-}
-
-// Event Listeners
-document.addEventListener('DOMContentLoaded', () => {
-    initializeTheme();
-    handlePreloader();
-    setGreeting();
-    initBackgroundVideo();
-    
-    // Theme toggle button
-    themeToggle.addEventListener('click', () => {
-        toggleTheme();
-        localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-    });
-});
-
-// Header scroll effect
-window.addEventListener('scroll', () => {
-    const header = document.querySelector('header');
-    header.classList.toggle('scrolled', window.scrollY > 50);
-});
-
-// Smooth scroll for navigation
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
+$(document).ready(function() {
+    // Add logo click refresh functionality
+    $('.navbar-brand').click(function(e) {
         e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
-        });
+        window.location.reload();
     });
-});
+    
+    // Preloader Handling
+    setTimeout(function() {
+        $('.preloader').fadeOut(500);
+        document.body.classList.add('loaded');
+    }, 1500);
+
+    // Cookie Notice Management
+    function hasSeenCookieNotice() {
+        return document.cookie.includes('noticeSeen=true');
+    }
+
+    function showCookieNotice() {
+        if (!hasSeenCookieNotice()) {
+            setTimeout(function() {
+                $('.cookie-consent').addClass('active');
+            }, 2000);
+        }
+    }
+
+    function dismissCookieNotice() {
+        const date = new Date();
+        date.setFullYear(date.getFullYear() + 1);
+        document.cookie = `noticeSeen=true; expires=${date.toUTCString()}; path=/`;
+        $('.cookie-consent').removeClass('active');
+        // Since we're using necessary cookies by default, we can now update the recent searches
+        updateRecentSearches();
+    }
+
+    $('#dismissCookieNotice').click(dismissCookieNotice);
+    showCookieNotice();
+
+    // Theme Toggle
+    $('#themeToggle').click(function(e) {
+        e.preventDefault();
+        $('body').toggleClass('dark-mode');
+        
+        if ($('body').hasClass('dark-mode')) {
+            $('#themeToggle i').removeClass('bi-moon-stars').addClass('bi-sun');
+        } else {
+            $('#themeToggle i').removeClass('bi-sun').addClass('bi-moon-stars');
+        }
+        
+        localStorage.setItem('theme', $('body').hasClass('dark-mode') ? 'dark' : 'light');
+    });
+
+    // Initialize Theme
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    $('body').toggleClass('dark-mode', savedTheme === 'dark');
+    
+    if (savedTheme === 'dark') {
+        $('#themeToggle i').removeClass('bi-moon-stars').addClass('bi-sun');
+    }
+
+    // Search Functionality
+    $('#searchForm').submit(function(e) {
+        e.preventDefault();
+        const location = $(this).find('input').val().trim();
+        
+        if(location) {
+            // Always add to recent searches since we're using necessary cookies
+            addRecentSearch(location);
+            $(this).find('input').val('');
+            
+            // Simulate search result with toast notification
+            showToast(`Searching forecast for ${location}...`);
+        }
+    });
+
+    // Toast notification
+    function showToast(message) {
+        // Create toast element if it doesn't exist
+        if ($('#toast-container').length === 0) {
+            $('body').append(`
+                <div id="toast-container" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+                </div>
+            `);
+        }
+        
+        const toastId = 'toast-' + Date.now();
+        const toast = `
+            <div id="${toastId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong class="me-auto">Weatherly</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    ${message}
+                </div>
+            </div>
+        `;
+        
+        $('#toast-container').append(toast);
+        const toastElement = new bootstrap.Toast(document.getElementById(toastId));
+        toastElement.show();
+        
+        // Auto remove after it's hidden
+        $(`#${toastId}`).on('hidden.bs.toast', function() {
+            $(this).remove();
+        });
+    }
+
+    // Recent Searches Handling
+    function addRecentSearch(location) {
+        const searches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
+        if(!searches.includes(location)) {
+            searches.unshift(location);
+            localStorage.setItem('recentSearches', JSON.stringify(searches.slice(0, 5)));
+            updateRecentSearches();
+        }
+    }
+
+    function updateRecentSearches() {
+        const searches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
+        $('.recent-searches').empty();
+        if (searches.length > 0) {
+            searches.forEach(location => {
+                $('.recent-searches').append(
+                    `<a href="#" class="list-group-item list-group-item-action bg-transparent text-white border-0 d-flex align-items-center">
+                        <i class="bi bi-geo-alt me-2"></i>
+                        ${location}
+                    </a>`
+                );
+            });
+            $('.recent-places p').hide();
+        } else {
+            $('.recent-places p').show();
+        }
+    }
+
+    // Initialize Recent Searches
+    updateRecentSearches();
+
+    // Video Controls
+    $('video').on({
+        mouseenter: function() {
+            if(this.paused) {
+                $(this).attr('data-bs-toggle', 'tooltip');
+                $(this).attr('data-bs-title', 'Click to play');
+                new bootstrap.Tooltip(this).show();
+            }
+        },
+        mouseleave: function() {
+            $(this).removeAttr('data-bs-toggle');
+            $(this).removeAttr('data-bs-title');
+            var tooltip = bootstrap.Tooltip.getInstance(this);
+            if (tooltip) {
+                tooltip.dispose();
+            }
+        }
+    });
+
+    // Video click handler
+    $('video').click(function() {
+        if(this.paused) {
+            this.play();
+        } else {
+            this.pause();
+        }
+    });
+
+    // Initialize all tooltips
+    setTimeout(function() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+            new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    }, 2000);
+    
+    // Smooth scrolling for anchor links
+    $('a[href^="#"]:not([data-bs-toggle])').on('click', function(e) {
+        e.preventDefault();
+        const target = $($(this).attr('href'));
+        if (target.length) {
+            $('html, body').animate({
+                scrollTop: target.offset().top - 70
+            }, 800);
+        }
+    });
+}); 
