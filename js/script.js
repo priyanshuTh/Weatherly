@@ -16,8 +16,8 @@ $(document).ready(function () {
     setTimeout(function () {
       $(".preloader").fadeOut(500);
       document.body.classList.add("loaded");
-    }, 1000); // Total duration 2s
-  }, 1000);
+    }, 1000); // Total duration 1s
+  }, 500); //show preloader for 0.5s
 
   // Cookie Notice Management
   function hasSeenCookieNotice() {
