@@ -61,6 +61,16 @@ $(document).ready(function () {
     );
   });
 
+  // Initialize Theme
+  const savedTheme = localStorage.getItem("theme") || "light";
+  $("body").toggleClass("dark-mode", savedTheme === "dark");
+
+  if (savedTheme === "dark") {
+    $("#themeToggle i").removeClass("bi-moon-stars").addClass("bi-sun");
+    $(".preloader").css("background-color", "#1a1a1a");
+    $(".preloader .text-muted").css("color", "#adb5bd");
+  }
+
   // Determine current season and update hero background
   function updateSeasonalBackground() {
     const date = new Date();
@@ -94,16 +104,6 @@ $(document).ready(function () {
 
   // Call the function to set initial seasonal background
   updateSeasonalBackground();
-
-  // Initialize Theme
-  const savedTheme = localStorage.getItem("theme") || "light";
-  $("body").toggleClass("dark-mode", savedTheme === "dark");
-
-  if (savedTheme === "dark") {
-    $("#themeToggle i").removeClass("bi-moon-stars").addClass("bi-sun");
-    $(".preloader").css("background-color", "#1a1a1a");
-    $(".preloader .text-muted").css("color", "#adb5bd");
-  }
 
   // Search Functionality
   $("#searchForm").submit(function (e) {
