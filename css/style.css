@@ -12,6 +12,16 @@ body {
     background-color: #f8f9fa;
 }
 
+/* Wind direction arrow alignment */
+.bi-arrow-up {
+    vertical-align: text-top;
+}
+
+/* Dark mode text color override */
+body.dark-mode .text-primary {
+    color: #6ea8fe !important;
+}
+
 /* Navbar */
 .navbar {
     background-color: var(--primary-color);
@@ -75,7 +85,8 @@ body {
     border-radius: 8px;
     padding: 2rem;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .search-container h1 {
