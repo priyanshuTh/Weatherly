@@ -7,6 +7,7 @@
     <title>Weatherly - Smart Weather Forecast</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/png" href="assets/images/logo.png">
 </head>
@@ -22,7 +23,7 @@
 
     <!-- Navigation -->
     <header>
-        <nav class="navbar navbar-expand navbar-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center" href="#">
                     <img src="assets/images/logo.png" alt="Weatherly logo" class="site-logo me-2">
@@ -51,10 +52,55 @@
                                 <h2 class="text-center mb-4">Find a Forecast</h2>
                                 <div class="input-group">
                                     <input type="text" class="form-control form-control-lg"
-                                        placeholder="Search for a place" aria-label="Search location">
+                                        placeholder="Search for a place" aria-label="Search location" id="searchInput">
                                     <button class="btn btn-primary" type="submit">
                                         <i class="bi bi-search"></i>
                                     </button>
+                                </div>
+
+                                <!-- Weather Results -->
+                                <div id="weatherResults" class="mt-4 card d-none bg-transparent weather-card">
+                                    <div class="card-body bg-dark text-black rounded-3">
+                                        <div class="row">
+                                            <div class="col-md-4 text-center border-end border-secondary">
+                                                <h3 id="locationName" class="mb-3 text-primary"></h3>
+                                                <div id="weatherIcon" class="text-center"></div>
+                                                <p id="weatherDescription" class="lead text-muted"></p>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <p class="mb-1"><i
+                                                                class="bi bi-thermometer-half me-2"></i>Temperature:
+                                                            <span id="temp" class="text-info"></span>
+                                                        </p>
+                                                        <p class="mb-1"><i class="bi bi-moisture me-2"></i>Feels Like:
+                                                            <span id="feelsLike" class="text-info"></span>
+                                                        </p>
+                                                        <p class="mb-1"><i class="bi bi-droplet me-2"></i>Humidity:
+                                                            <span id="humidity" class="text-info"></span>
+                                                        </p>
+                                                        <p class="mb-1"><i class="bi bi-speedometer2 me-2"></i>Pressure:
+                                                            <span id="pressure" class="text-info"></span>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <p class="mb-1"><i
+                                                                class="bi bi-thermometer-low me-2"></i>Min/Max: <span
+                                                                id="tempMinMax" class="text-info"></span></p>
+                                                        <p class="mb-1"><i class="bi bi-wind me-2"></i>Wind: <span
+                                                                id="windSpeed" class="text-info"></span></p>
+                                                        <p class="mb-1"><i class="bi bi-clouds me-2"></i>Clouds: <span
+                                                                id="cloudCover" class="text-info"></span></p>
+                                                        <p class="mb-1"><i class="bi bi-sunrise me-2"></i>Sunrise: <span
+                                                                id="sunrise" class="text-info"></span></p>
+                                                        <p class="mb-1"><i class="bi bi-sunset me-2"></i>Sunset: <span
+                                                                id="sunset" class="text-info"></span></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <!-- Recent Places -->
@@ -92,7 +138,8 @@
                             </figure>
                             <h3>Weather Maps</h3>
                             <p>Interactive maps showing precipitation, temperature, wind, and more.</p>
-                            <a href="#" class="btn btn-outline-primary btn-sm">Explore Maps</a>
+                            <a href="#" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#mapsModal">Explore Maps</a>
                         </div>
                     </article>
                     <article class="col-md-4 mb-4">
@@ -146,7 +193,8 @@
                     <p class="mb-2 text-white-50">Download our app:</p>
                     <div class="d-flex justify-content-center gap-2">
                         <a href="https://apps.apple.com/app/weatherly-app" target="_blank" class="me-2">
-                            <img src="assets/images/App-store.png" alt="Download on the App Store" height="40">
+                            <img src="assets/images/App-store.png" alt="Download on the App Store" class="img-fluid"
+                                height="40px">
                         </a>
                         <a href="https://play.google.com/store/apps/details?id=com.weatherly.app" target="_blank">
                             <img src="assets/images/Google-Play.png" alt="Get it on Google Play" height="40">
@@ -193,8 +241,25 @@
         </div>
     </div>
 
+    <!-- Weather Maps Modal -->
+    <div class="modal fade" id="mapsModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Interactive Weather Map</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div id="weatherMap" style="height: 60vh;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="toast-container" class="position-fixed top-0 end-0 p-3"></div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="js/script.js"></script>
 </body>
 

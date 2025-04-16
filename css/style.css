@@ -12,7 +12,11 @@ body {
     background-color: #f8f9fa;
 }
 
-/* Navbar */
+.bi-arrow-up {
+    vertical-align: text-top;
+}
+
+/*Navbar*/
 .navbar {
     background-color: var(--primary-color);
     padding: 0.8rem 1rem;
@@ -39,13 +43,18 @@ body {
     transform: rotate(15deg);
 }
 
-/* Hero Section */
+/* Hero Section*/
 .hero-section {
     background-image: url('../assets/images/hero-bg.jpg');
     background-size: cover;
     background-position: center;
     color: white;
     position: relative;
+}
+
+.hero-overlay {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7));
+    padding: 5rem 0;
 }
 
 .hero-section[data-season="spring"] .hero-overlay {
@@ -64,18 +73,14 @@ body {
     background: linear-gradient(rgba(33, 150, 243, 0.6), rgba(0, 0, 0, 0.7));
 }
 
-.hero-overlay {
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7));
-    padding: 5rem 0;
-}
-
-/* Search Box */
+/* Search Container*/
 .search-container {
     background: rgba(25, 28, 36, 0.8);
     border-radius: 8px;
     padding: 2rem;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .search-container h1 {
@@ -93,24 +98,83 @@ body {
     padding: 0.5rem 1.5rem;
 }
 
-/* Recent Places */
-.recent-places {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 6px;
-    padding: 1.2rem;
-    margin-top: 1.5rem;
+.search-container .btn:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
 }
 
-.recent-places h3 {
-    font-size: 0.9rem;
-    font-weight: 600;
-    letter-spacing: 1px;
+/* Weather Card Styling */
+.weather-card {
+    border: none;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
 }
 
-body:not(.dark-mode) .recent-searches .list-group-item {
-    color: #333;
-    background-color: rgba(255, 255, 255, 0.8);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+body.dark-mode .weather-card .card-body {
+    background-color: #2d2d2d !important;
+    color: #fff !important;
+    border: 1px solid #444;
+}
+
+body:not(.dark-mode) .weather-card .card-body {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    color: var(--text-color);
+    border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+body:not(.dark-mode) .weather-card .text-info {
+    color: var(--primary-color) !important;
+}
+
+body.dark-mode .weather-card .text-muted {
+    color: #adb5bd !important;
+}
+
+body.dark-mode .weather-card .border-secondary {
+    border-color: #555 !important;
+}
+
+/* Icon styling */
+.weather-card .bi {
+    width: 1.5rem;
+    text-align: center;
+}
+
+/* Weather Icon Responsiveness */
+#weatherIcon {
+    max-width: 150px;
+    margin: 0 auto 1rem;
+}
+
+#weatherIcon img {
+    width: 100%;
+    height: auto;
+    max-width: 150px;
+}
+
+#weatherIcon img:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    #weatherIcon {
+        max-width: 100px;
+    }
+
+    #weatherIcon img {
+        max-width: 80px;
+    }
+}
+
+@media (max-width: 576px) {
+    #weatherIcon {
+        max-width: 80px;
+    }
+
+    #weatherIcon img {
+        max-width: 60px;
+    }
 }
 
 /* Features Section */
@@ -205,6 +269,38 @@ body:not(.dark-mode) .recent-searches .list-group-item {
     border-radius: 0 0 12px 12px;
 }
 
+/* ----- Recent Places ----- */
+.recent-places {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 1.2rem;
+    margin-top: 1.5rem;
+}
+
+.recent-places h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+body:not(.dark-mode) .recent-searches .list-group-item {
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/*Footer*/
+footer .d-flex img {
+    transition: transform 0.3s ease;
+    width: 80px;
+    height: 80px;
+    margin: 0 1rem;
+}
+
+footer .d-flex img:hover {
+    transform: scale(1.1);
+}
+
 /* Cookie Consent */
 .cookie-consent {
     position: fixed;
@@ -258,7 +354,6 @@ body:not(.dark-mode) .recent-searches .list-group-item {
     transition: opacity 0.5s ease-out;
 }
 
-/* Active states */
 .preloader.active img {
     transform: scale(1.2) rotate(15deg);
 }
@@ -272,24 +367,20 @@ body:not(.dark-mode) .recent-searches .list-group-item {
     opacity: 1;
 }
 
-body.dark-mode .preloader {
-    background-color: var(--dark-bg);
-}
-
-body.dark-mode .preloader .text-muted {
-    color: #adb5bd !important;
-}
-
 body.loaded .preloader {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
 }
 
-/* Dark Mode */
+/* DARK MODE OVERRIDES */
 body.dark-mode {
     background-color: var(--dark-bg);
     color: #ffffff;
+}
+
+body.dark-mode .text-primary {
+    color: #6ea8fe !important;
 }
 
 body.dark-mode .navbar {
@@ -350,19 +441,15 @@ body.dark-mode .btn-close {
     filter: invert(1) grayscale(100%) brightness(200%);
 }
 
-/* Footer */
-footer .d-flex img {
-    transition: transform 0.3s ease;
-    width: 80px;
-    height: 80px;
-    margin: 0 1rem;
+body.dark-mode .preloader {
+    background-color: var(--dark-bg);
 }
 
-footer .d-flex img:hover {
-    transform: scale(1.1);
+body.dark-mode .preloader .text-muted {
+    color: #adb5bd !important;
 }
 
-/* Responsive Design */
+/* RESPONSIVE DESIGN */
 @media (max-width: 991px) {
     .search-container {
         margin: 0 1rem;

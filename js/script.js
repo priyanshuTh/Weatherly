@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  // Add logo click refresh functionality
+  // Navbar brand click handler
   $(".navbar-brand").click(function (e) {
     e.preventDefault();
     window.location.reload();
@@ -7,17 +7,14 @@ $(document).ready(function () {
 
   // Preloader Handling
   setTimeout(function () {
-    $(".preloader")
-      .addClass("active")
-      .find(".spinner-border") // Bootstrap spinner
-      .addClass("spinner-grow"); // Change spinner style
+    $(".preloader").addClass("active");
 
-    // Then fade out
     setTimeout(function () {
-      $(".preloader").fadeOut(500);
-      document.body.classList.add("loaded");
-    }, 1000); // Total duration 2s
-  }, 1000);
+      $(".preloader").fadeOut(500, function () {
+        document.body.classList.add("loaded");
+      });
+    }, 1000);
+  }, 500);
 
   // Cookie Notice Management
   function hasSeenCookieNotice() {
@@ -37,7 +34,6 @@ $(document).ready(function () {
     date.setFullYear(date.getFullYear() + 1);
     document.cookie = `noticeSeen=true; expires=${date.toUTCString()}; path=/`;
     $(".cookie-consent").removeClass("active");
-    // Since we're using necessary cookies by default, we can now update the recent searches
     updateRecentSearches();
   }
 
@@ -61,14 +57,23 @@ $(document).ready(function () {
     );
   });
 
-  // Determine current season and update hero background
+  // Initialize Theme
+  const savedTheme = localStorage.getItem("theme") || "light";
+  $("body").toggleClass("dark-mode", savedTheme === "dark");
+
+  if (savedTheme === "dark") {
+    $("#themeToggle i").removeClass("bi-moon-stars").addClass("bi-sun");
+    $(".preloader").css("background-color", "#1a1a1a");
+    $(".preloader .text-muted").css("color", "#adb5bd");
+  }
+
+  // Seasonal Background
   function updateSeasonalBackground() {
     const date = new Date();
-    const month = date.getMonth(); // 0-based (0 = January, 11 = December)
+    const month = date.getMonth();
     let season;
     let backgroundImage;
 
-    // Determine season based on Northern Hemisphere seasons
     if (month >= 2 && month <= 4) {
       season = "spring";
       backgroundImage = "assets/images/spring.jpg";
@@ -83,77 +88,153 @@ $(document).ready(function () {
       backgroundImage = "assets/images/winter.jpg";
     }
 
-    // Update hero section background
     $(".hero-section").css("background-image", `url('${backgroundImage}')`);
-
-    // Add a data attribute for potential additional styling
     $(".hero-section").attr("data-season", season);
-
-    console.log(`Season set to: ${season}`);
   }
-
-  // Call the function to set initial seasonal background
   updateSeasonalBackground();
 
-  // Initialize Theme
-  const savedTheme = localStorage.getItem("theme") || "light";
-  $("body").toggleClass("dark-mode", savedTheme === "dark");
+  // Weather Map Functionality
+  let weatherMap;
+  $("#mapsModal").on("shown.bs.modal", function () {
+    if (!weatherMap) {
+      weatherMap = L.map("weatherMap").setView([0, 0], 2);
 
-  if (savedTheme === "dark") {
-    $("#themeToggle i").removeClass("bi-moon-stars").addClass("bi-sun");
-    $(".preloader").css("background-color", "#1a1a1a");
-    $(".preloader .text-muted").css("color", "#adb5bd");
-  }
+      // Base layers
+      const baseLayers = {
+        "Street Map": L.tileLayer(
+          "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?lang=en",
+          {
+            attribution: "© OpenStreetMap contributors",
+          }
+        ),
+      };
 
-  // Search Functionality
-  $("#searchForm").submit(function (e) {
-    e.preventDefault();
-    const location = $(this).find("input").val().trim();
+      // Overlay layers
+      const overlayMaps = {
+        Temperature: L.tileLayer(
+          `https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=95425a4f1ff33420efb87cc0706610af`,
+          { maxZoom: 20, opacity: 0.5 }
+        ),
+        "Wind Speed": L.tileLayer(
+          `https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=95425a4f1ff33420efb87cc0706610af`,
+          { maxZoom: 20, opacity: 0.5 }
+        ),
+        Precipitation: L.tileLayer(
+          `https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=95425a4f1ff33420efb87cc0706610af`,
+          { maxZoom: 20, opacity: 0.5 }
+        ),
+      };
 
-    if (location) {
-      // Always add to recent searches
-      addRecentSearch(location);
-      $(this).find("input").val("");
+      // Add default layers
+      baseLayers["Street Map"].addTo(weatherMap);
+      overlayMaps["Temperature"].addTo(weatherMap);
 
-      // Simulate search result with toast notification
-      showToast(`Searching forecast for ${location}...`);
+      // Add layer control
+      L.control
+        .layers(baseLayers, overlayMaps, {
+          collapsed: false,
+          position: "bottomright",
+        })
+        .addTo(weatherMap);
     }
   });
 
-  // Toast notification
-  function showToast(message) {
-    // Create toast element if it doesn't exist
-    if ($("#toast-container").length === 0) {
-      $("body").append(`
-                <div id="toast-container" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-                </div>
-            `);
+  // Weather Search Functionality
+  $("#searchForm").submit(async function (e) {
+    e.preventDefault();
+    const location = $(this).find("input").val().trim();
+    if (location) {
+      await performSearch(location);
     }
+  });
 
-    const toastId = "toast-" + Date.now();
-    const toast = `
-            <div id="${toastId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
-                    <strong class="me-auto">Weatherly</strong>
-                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-                <div class="toast-body">
-                    ${message}
-                </div>
-            </div>
-        `;
+  // OpenWeatherMap API Integration
+  async function getWeatherData(location) {
+    const API_KEY = "95425a4f1ff33420efb87cc0706610af";
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(
+      location
+    )}&appid=${API_KEY}&units=metric`;
 
-    $("#toast-container").append(toast);
-    const toastElement = new bootstrap.Toast(document.getElementById(toastId));
-    toastElement.show();
-
-    // Auto remove after it's hidden
-    $(`#${toastId}`).on("hidden.bs.toast", function () {
-      $(this).remove();
-    });
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Weather data unavailable");
+      return await response.json();
+    } catch (error) {
+      if (error.message === "Failed to fetch") {
+        throw new Error("Network error - please check your connection");
+      }
+      throw error;
+    }
   }
 
-  // Recent Searches Handling
+  // Weather Display Function
+  function displayWeather(data) {
+    $("#weatherResults").removeClass("d-none");
+
+    // Main Information
+    $("#locationName").text(`${data.name}, ${data.sys.country}`);
+    $("#weatherDescription").text(data.weather[0].description);
+    $("#weatherIcon").html(
+      `<img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@4x.png" 
+       alt="${data.weather[0].description}" 
+       class="img-fluid shadow-sm rounded"
+       width="200" 
+       height="200">`
+    );
+
+    // Weather Data
+    $("#tempMinMax").html(
+      `${Math.round(data.main.temp_min)}°C / ${Math.round(
+        data.main.temp_max
+      )}°C`
+    );
+    $("#feelsLike").html(`${Math.round(data.main.feels_like)}°C`);
+    $("#humidity").text(`${data.main.humidity}%`);
+    $("#windSpeed").html(
+      `${data.wind.speed} m/s <i class="bi bi-arrow-up fs-6 ms-1" 
+       style="transform: rotate(${data.wind.deg || 0}deg)"></i>`
+    );
+    $("#pressure").text(`${data.main.pressure} hPa`);
+    $("#cloudCover").text(`${data.clouds.all}%`);
+
+    // Sunrise/Sunset
+    const formatTime = (timestamp) =>
+      new Date(timestamp * 1000).toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+
+    $("#sunrise").text(formatTime(data.sys.sunrise));
+    $("#sunset").text(formatTime(data.sys.sunset));
+
+    // Update map markers
+    weatherMap.eachLayer((layer) => {
+      if (layer instanceof L.Marker) weatherMap.removeLayer(layer);
+    });
+
+    const marker = L.marker([data.coord.lat, data.coord.lon]).addTo(weatherMap)
+      .bindPopup(`
+        <div class="map-popup">
+          <h6 class="mb-1">${data.name}</h6>
+          <div class="row small">
+            <div class="col-6">
+              <i class="bi bi-thermometer"></i> ${Math.round(
+                data.main.temp
+              )}°C<br>
+              <i class="bi bi-wind"></i> ${data.wind.speed} m/s
+            </div>
+            <div class="col-6">
+              <i class="bi bi-droplet"></i> ${data.main.humidity}%<br>
+              <i class="bi bi-clouds"></i> ${data.clouds.all}%
+            </div>
+          </div>
+        </div>
+      `);
+
+    weatherMap.setView([data.coord.lat, data.coord.lon], 8);
+  }
+
+  // Recent Searches
   function addRecentSearch(location) {
     const searches = JSON.parse(localStorage.getItem("recentSearches") || "[]");
     if (!searches.includes(location)) {
@@ -171,11 +252,13 @@ $(document).ready(function () {
     $(".recent-searches").empty();
     if (searches.length > 0) {
       searches.forEach((location) => {
+        const safeLocation = $("<div>").text(location).html();
         $(".recent-searches").append(
-          `<a href="#" class="list-group-item list-group-item-action bg-transparent text-white border-0 d-flex align-items-center">
-                        <i class="bi bi-geo-alt me-2"></i>
-                        ${location}
-                    </a>`
+          `<a href="#" class="list-group-item list-group-item-action bg-transparent text-white border-0 d-flex align-items-center" 
+             data-location="${safeLocation}">
+            <i class="bi bi-geo-alt me-2"></i>
+            ${safeLocation}
+          </a>`
         );
       });
       $(".recent-places p").hide();
@@ -183,36 +266,65 @@ $(document).ready(function () {
       $(".recent-places p").show();
     }
   }
-
-  // Initialize Recent Searches
   updateRecentSearches();
+
+  $(".recent-searches").on("click", "[data-location]", function (e) {
+    e.preventDefault();
+    const location = $(this).data("location");
+    $("#searchInput").val(location);
+    performSearch(location);
+  });
+
+  // Search Function
+  async function performSearch(location) {
+    try {
+      if (!location) {
+        showToast("Please enter a location to search");
+        return;
+      }
+
+      showToast(`Searching for ${location}...`);
+      $("#weatherResults").addClass("d-none");
+      const weatherData = await getWeatherData(location);
+      displayWeather(weatherData);
+      addRecentSearch(location);
+    } catch (error) {
+      showToast(error.message || "Failed to get weather data");
+    }
+  }
+
+  // Toast Notification
+  function showToast(message) {
+    const toastId = "toast-" + Date.now();
+    const toast = `
+      <div id="${toastId}" class="toast" role="alert">
+        <div class="toast-header">
+          <strong class="me-auto">Weatherly</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body">${message}</div>
+      </div>`;
+
+    $("#toast-container").append(toast);
+    new bootstrap.Toast(document.getElementById(toastId)).show();
+    $(`#${toastId}`).on("hidden.bs.toast", () => $(this).remove());
+  }
 
   // Video Controls
   $("video").on({
     mouseenter: function () {
       if (this.paused) {
-        $(this).attr("data-bs-toggle", "tooltip");
-        $(this).attr("data-bs-title", "Click to play");
+        $(this).attr("title", "Click to play");
         new bootstrap.Tooltip(this).show();
       }
     },
     mouseleave: function () {
-      $(this).removeAttr("data-bs-toggle");
-      $(this).removeAttr("data-bs-title");
-      var tooltip = bootstrap.Tooltip.getInstance(this);
-      if (tooltip) {
-        tooltip.dispose();
-      }
+      $(this).removeAttr("title");
+      bootstrap.Tooltip.getInstance(this)?.dispose();
     },
-  });
-
-  // Video click handler
-  $("video").click(function () {
-    if (this.paused) {
-      this.play();
-    } else {
-      this.pause();
-    }
+    click: function () {
+      this.paused ? this.play() : this.pause();
+    },
   });
 
   // Initialize all tooltips
@@ -225,7 +337,7 @@ $(document).ready(function () {
     });
   }, 2000);
 
-  // Smooth scrolling for anchor links
+  // Smooth scrolling
   $('a[href^="#"]:not([data-bs-toggle])').on("click", function (e) {
     e.preventDefault();
     const target = $($(this).attr("href"));
@@ -238,4 +350,58 @@ $(document).ready(function () {
       );
     }
   });
+
+  // Location Permission Handling
+  const locationPermission = localStorage.getItem("locationPermission");
+  if (!locationPermission) {
+    $("#locationModal").modal("show");
+  } else if (locationPermission === "granted") {
+    requestLocation(); // Auto-fetch weather if permission granted
+  }
+
+  // Event handlers for Allow/Deny buttons (keep only one set)
+  $("#allowLocation").click(function () {
+    localStorage.setItem("locationPermission", "granted");
+    $("#locationModal").modal("hide");
+    requestLocation();
+  });
+
+  $("#denyLocation").click(function () {
+    localStorage.setItem("locationPermission", "denied");
+    $("#locationModal").modal("hide");
+    showToast("Enable location access or search manually");
+  });
+
+  function requestLocation() {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          getWeatherByCoords(latitude, longitude);
+        },
+        (error) => {
+          showToast("Location access denied. Search for a location manually.");
+          $("#locationModal").modal("hide");
+        }
+      );
+    } else {
+      showToast("Geolocation not supported - search manually");
+      $("#locationModal").modal("hide");
+    }
+  }
+
+  async function getWeatherByCoords(lat, lon) {
+    const API_KEY = "95425a4f1ff33420efb87cc0706610af";
+    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Weather data unavailable");
+      const data = await response.json();
+      displayWeather(data);
+      addRecentSearch(data.name);
+    } catch (error) {
+      showToast("Couldn't get location weather. Search manually instead.");
+    }
+  }
 });
