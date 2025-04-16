@@ -10,17 +10,15 @@ body {
     background-color: #f0f4f8;
 }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 20px;
-}
-
-h1 {
+.container h1 {
     font-size: 2.5rem;
-    color: #2c3e50;
+    color: #000000;
     margin-bottom: 30px;
     text-align: center;
+}
+
+body.dark-mode .container h1 {
+    color: #2980b9;
 }
 
 .about-content {
@@ -37,14 +35,19 @@ h1 {
     box-shadow: 0 5px 15px rgba(171, 133, 133, 0.2);
 }
 
-.pragraph1,
-.pragraph2,
-.pragraph3,
-.pragraph4 {
+body.dark-mode .about-content {
+    background: #2d2d2d;
+}
+
+.pragraph {
     font-size: 1.1rem;
-    color: #34495e;
+    color: #000000;
     margin-bottom: 25px;
     line-height: 1.8;
+}
+
+body.dark-mode .pragraph {
+    color: #fafafa;
 }
 
 .values-grid {
@@ -63,6 +66,10 @@ h1 {
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
 }
 
+body.dark-mode .value-card {
+    background: #2d2d2d;
+}
+
 .value-card:hover {
     transform: scale(1.1);
     transition: transform 0.3s ease;
@@ -78,6 +85,10 @@ h1 {
 .value-card p {
     color: #7f8c8d;
     font-size: 0.95rem;
+}
+
+body.dark-mode .value-card p {
+    color: #fafafa;
 }
 
 .contact-section {
