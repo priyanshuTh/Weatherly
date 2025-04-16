@@ -59,29 +59,43 @@
                                 </div>
 
                                 <!-- Weather Results -->
-                                <div id="weatherResults" class="mt-4 card d-none">
-                                    <div class="card-body">
+                                <div id="weatherResults" class="mt-4 card d-none bg-transparent weather-card">
+                                    <div class="card-body bg-dark text-black rounded-3">
                                         <div class="row">
-                                            <div class="col-md-4 text-center">
-                                                <h3 id="locationName" class="mb-3"></h3>
-                                                <div id="weatherIcon" class="display-1"></div>
-                                                <p id="weatherDescription" class="lead"></p>
+                                            <div class="col-md-4 text-center border-end border-secondary">
+                                                <h3 id="locationName" class="mb-3 text-primary"></h3>
+                                                <div id="weatherIcon" class="text-center"></div>
+                                                <p id="weatherDescription" class="lead text-muted"></p>
                                             </div>
                                             <div class="col-md-8">
                                                 <div class="row">
                                                     <div class="col-6">
-                                                        <p class="mb-1">Temperature: <span id="temp"></span></p>
-                                                        <p class="mb-1">Feels Like: <span id="feelsLike"></span></p>
-                                                        <p class="mb-1">Humidity: <span id="humidity"></span></p>
-                                                        <p class="mb-1">Pressure: <span id="pressure"></span></p>
+                                                        <p class="mb-1"><i
+                                                                class="bi bi-thermometer-half me-2"></i>Temperature:
+                                                            <span id="temp" class="text-info"></span>
+                                                        </p>
+                                                        <p class="mb-1"><i class="bi bi-moisture me-2"></i>Feels Like:
+                                                            <span id="feelsLike" class="text-info"></span>
+                                                        </p>
+                                                        <p class="mb-1"><i class="bi bi-droplet me-2"></i>Humidity:
+                                                            <span id="humidity" class="text-info"></span>
+                                                        </p>
+                                                        <p class="mb-1"><i class="bi bi-speedometer2 me-2"></i>Pressure:
+                                                            <span id="pressure" class="text-info"></span>
+                                                        </p>
                                                     </div>
-                                                    <!-- Add this new column -->
                                                     <div class="col-6">
-                                                        <p class="mb-1">Min/Max: <span id="tempMinMax"></span></p>
-                                                        <p class="mb-1">Wind: <span id="windSpeed"></span></p>
-                                                        <p class="mb-1">Clouds: <span id="cloudCover"></span></p>
-                                                        <p class="mb-1">Sunrise: <span id="sunrise"></span></p>
-                                                        <p class="mb-1">Sunset: <span id="sunset"></span></p>
+                                                        <p class="mb-1"><i
+                                                                class="bi bi-thermometer-low me-2"></i>Min/Max: <span
+                                                                id="tempMinMax" class="text-info"></span></p>
+                                                        <p class="mb-1"><i class="bi bi-wind me-2"></i>Wind: <span
+                                                                id="windSpeed" class="text-info"></span></p>
+                                                        <p class="mb-1"><i class="bi bi-clouds me-2"></i>Clouds: <span
+                                                                id="cloudCover" class="text-info"></span></p>
+                                                        <p class="mb-1"><i class="bi bi-sunrise me-2"></i>Sunrise: <span
+                                                                id="sunrise" class="text-info"></span></p>
+                                                        <p class="mb-1"><i class="bi bi-sunset me-2"></i>Sunset: <span
+                                                                id="sunset" class="text-info"></span></p>
                                                     </div>
                                                 </div>
                                             </div>

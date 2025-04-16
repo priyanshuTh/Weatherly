@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  // Remove previous syntax error
+  // Navbar brand click handler
   $(".navbar-brand").click(function (e) {
     e.preventDefault();
     window.location.reload();
@@ -113,15 +113,15 @@ $(document).ready(function () {
       const overlayMaps = {
         Temperature: L.tileLayer(
           `https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=95425a4f1ff33420efb87cc0706610af`,
-          { maxZoom: 19, opacity: 0.7 }
+          { maxZoom: 20, opacity: 0.5 }
         ),
         "Wind Speed": L.tileLayer(
           `https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=95425a4f1ff33420efb87cc0706610af`,
-          { maxZoom: 19, opacity: 0.7 }
+          { maxZoom: 20, opacity: 0.5 }
         ),
         Precipitation: L.tileLayer(
           `https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=95425a4f1ff33420efb87cc0706610af`,
-          { maxZoom: 19, opacity: 0.7 }
+          { maxZoom: 20, opacity: 0.5 }
         ),
       };
 
@@ -145,17 +145,6 @@ $(document).ready(function () {
     const location = $(this).find("input").val().trim();
     if (location) {
       await performSearch(location);
-      try {
-        // Show loading state
-        showToast(`Searching for ${location}...`);
-        $("#weatherResults").addClass("d-none");
-
-        const weatherData = await getWeatherData(location);
-        displayWeather(weatherData);
-        addRecentSearch(location);
-      } catch (error) {
-        showToast(error.message || "Failed to get weather data");
-      }
     }
   });
 
@@ -178,7 +167,7 @@ $(document).ready(function () {
     }
   }
 
-  // Enhanced Weather Display Function
+  // Weather Display Function
   function displayWeather(data) {
     $("#weatherResults").removeClass("d-none");
 
@@ -188,11 +177,17 @@ $(document).ready(function () {
     $("#weatherIcon").html(
       `<img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@4x.png" 
        alt="${data.weather[0].description}" 
-       class="img-fluid shadow-sm rounded">`
+       class="img-fluid shadow-sm rounded"
+       width="200" 
+       height="200">`
     );
 
     // Weather Data
-    $("#temp").html(`${Math.round(data.main.temp)}°C`);
+    $("#tempMinMax").html(
+      `${Math.round(data.main.temp_min)}°C / ${Math.round(
+        data.main.temp_max
+      )}°C`
+    );
     $("#feelsLike").html(`${Math.round(data.main.feels_like)}°C`);
     $("#humidity").text(`${data.main.humidity}%`);
     $("#windSpeed").html(
@@ -200,12 +195,11 @@ $(document).ready(function () {
        style="transform: rotate(${data.wind.deg || 0}deg)"></i>`
     );
     $("#pressure").text(`${data.main.pressure} hPa`);
-    $("#visibility").text(`${(data.visibility / 1000).toFixed(1)} km`);
     $("#cloudCover").text(`${data.clouds.all}%`);
 
     // Sunrise/Sunset
     const formatTime = (timestamp) =>
-      new Date(timestamp * 1000).toLocaleTimeString([], {
+      new Date(timestamp * 1000).toLocaleTimeString("en-US", {
         hour: "2-digit",
         minute: "2-digit",
       });
@@ -213,11 +207,11 @@ $(document).ready(function () {
     $("#sunrise").text(formatTime(data.sys.sunrise));
     $("#sunset").text(formatTime(data.sys.sunset));
 
+    // Update map markers
     weatherMap.eachLayer((layer) => {
       if (layer instanceof L.Marker) weatherMap.removeLayer(layer);
     });
 
-    // Create new marker with weather data
     const marker = L.marker([data.coord.lat, data.coord.lon]).addTo(weatherMap)
       .bindPopup(`
         <div class="map-popup">
@@ -237,7 +231,6 @@ $(document).ready(function () {
         </div>
       `);
 
-    // Center map on marker
     weatherMap.setView([data.coord.lat, data.coord.lon], 8);
   }
 
@@ -254,7 +247,6 @@ $(document).ready(function () {
     }
   }
 
-  // Update Recent Searches Display
   function updateRecentSearches() {
     const searches = JSON.parse(localStorage.getItem("recentSearches") || "[]");
     $(".recent-searches").empty();
@@ -283,9 +275,14 @@ $(document).ready(function () {
     performSearch(location);
   });
 
-  // Extract search logic into a reusable function
+  // Search Function
   async function performSearch(location) {
     try {
+      if (!location) {
+        showToast("Please enter a location to search");
+        return;
+      }
+
       showToast(`Searching for ${location}...`);
       $("#weatherResults").addClass("d-none");
       const weatherData = await getWeatherData(location);
@@ -340,7 +337,7 @@ $(document).ready(function () {
     });
   }, 2000);
 
-  // Smooth scrolling for anchor links
+  // Smooth scrolling
   $('a[href^="#"]:not([data-bs-toggle])').on("click", function (e) {
     e.preventDefault();
     const target = $($(this).attr("href"));
@@ -353,4 +350,58 @@ $(document).ready(function () {
       );
     }
   });
+
+  // Location Permission Handling
+  const locationPermission = localStorage.getItem("locationPermission");
+  if (!locationPermission) {
+    $("#locationModal").modal("show");
+  } else if (locationPermission === "granted") {
+    requestLocation(); // Auto-fetch weather if permission granted
+  }
+
+  // Event handlers for Allow/Deny buttons (keep only one set)
+  $("#allowLocation").click(function () {
+    localStorage.setItem("locationPermission", "granted");
+    $("#locationModal").modal("hide");
+    requestLocation();
+  });
+
+  $("#denyLocation").click(function () {
+    localStorage.setItem("locationPermission", "denied");
+    $("#locationModal").modal("hide");
+    showToast("Enable location access or search manually");
+  });
+
+  function requestLocation() {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          getWeatherByCoords(latitude, longitude);
+        },
+        (error) => {
+          showToast("Location access denied. Search for a location manually.");
+          $("#locationModal").modal("hide");
+        }
+      );
+    } else {
+      showToast("Geolocation not supported - search manually");
+      $("#locationModal").modal("hide");
+    }
+  }
+
+  async function getWeatherByCoords(lat, lon) {
+    const API_KEY = "95425a4f1ff33420efb87cc0706610af";
+    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Weather data unavailable");
+      const data = await response.json();
+      displayWeather(data);
+      addRecentSearch(data.name);
+    } catch (error) {
+      showToast("Couldn't get location weather. Search manually instead.");
+    }
+  }
 });
