@@ -31,7 +31,16 @@ h1 {
     margin-bottom: 40px;
 }
 
-.pragraph1, .pragraph2, .pragraph3, .pragraph4 {
+.about-content:hover {
+    transform: scale(1.02);
+    transition: transform 0.3s ease;
+    box-shadow: 0 5px 15px rgba(171, 133, 133, 0.2);
+}
+
+.pragraph1,
+.pragraph2,
+.pragraph3,
+.pragraph4 {
     font-size: 1.1rem;
     color: #34495e;
     margin-bottom: 25px;
@@ -51,11 +60,13 @@ h1 {
     border-radius: 10px;
     text-align: center;
     transition: transform 0.3s ease;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
 }
 
 .value-card:hover {
-    transform: translateY(-5px);
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .value-card h3 {
@@ -86,14 +97,16 @@ h1 {
 }
 
 .contact-btn:hover {
-    background: #3498db;
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 768px) {
     .container {
         padding: 20px;
     }
-    
+
     .about-content {
         padding: 25px;
     }
