@@ -1,36 +1,62 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Weatherly</title>
-    <link rel="stylesheet" href="/Weatherly/css/about.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/about.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
 </head>
+
 <body>
+    <!-- Navigation -->
     <header>
-        <div class="container">
-            <h1>About Weatherly</h1>
-        </div>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" href="../index.html">
+                    <img src="../assets/images/logo.png" alt="Weatherly logo" class="site-logo me-2">
+                    <span class="fw-bold">Weatherly</span>
+                </a>
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link btn btn-outline btn-sm ms-2 py-1" href="about.html">About Us</a>
+                    <a class="nav-link btn btn-outline btn-sm ms-2 py-1" href="login.html">Login</a>
+                    <a class="nav-link btn btn-outline btn-sm ms-2 py-1" href="signup.html">Sign Up</a>
+                    <a href="#" id="themeToggle" class="nav-link ms-3">
+                        <i class="bi bi-moon-stars"></i>
+                    </a>
+                </div>
+            </div>
+        </nav>
     </header>
 
     <main>
         <div class="container">
+            <h1>About Weatherly</h1>
             <div class="about-content">
-                <p class="pragraph1">Step into a realm where weather transforms into an adventure! At Weatherly, modern design meets
+                <p class="pragraph1">Step into a realm where weather transforms into an adventure! At Weatherly, modern
+                    design meets
                     innovative technology to bring you a sleek, interactive weather experience that feels as warm and
-                    familiar as an old friend’s greeting.</p>
-                <p class="pragraph2">From the moment you land on our site, you’re welcomed by a personalized message that taps into your exact
+                    familiar as an old friend's greeting.</p>
+                <p class="pragraph2">From the moment you land on our site, you're welcomed by a personalized message
+                    that taps into your exact
                     location, instantly setting the stage with dynamic, real-time forecasts that pop and dance on your
-                    screen. It’s not just about knowing whether to carry an umbrella; it’s about experiencing the magic of
+                    screen. It's not just about knowing whether to carry an umbrella; it's about experiencing the magic
+                    of
                     weather tailored to you.</p>
-                <p class="pragraph3">Craving a more personal touch? Our state-of-the-art voice command feature lets you chat with the weather.
-                    Simply ask, “What should I wear today?” and our smart assistant will serve up customized clothing
-                    recommendations that match your local vibe—whether you need to layer up for a brisk breeze or enjoy a
+                <p class="pragraph3">Craving a more personal touch? Our state-of-the-art voice command feature lets you
+                    chat with the weather.
+                    Simply ask, "What should I wear today?" and our smart assistant will serve up customized clothing
+                    recommendations that match your local vibe—whether you need to layer up for a brisk breeze or enjoy
+                    a
                     sunny stroll in style.</p>
-                <p class="pragraph4">Immerse yourself in Weatherly’s world where every update is a conversation, every forecast an invitation
+                <p class="pragraph4">Immerse yourself in Weatherly's world where every update is a conversation, every
+                    forecast an invitation
                     to explore, and every feature is designed with you in mind. With a blend of technology, style, and
-                    personalized insights, Weatherly isn’t just another website—it’s your ultimate weather companion,
+                    personalized insights, Weatherly isn't just another website—it's your ultimate weather companion,
                     sparking excitement and empowering your daily adventures.</p>
             </div>
 
@@ -46,7 +72,7 @@
                 <div class="value-card">
                     <h3>SEAMLESS ACCCESS</h3>
                     <p>Stay updated about the weather anywhere anytime</p>
-                   
+                </div>
                 <div class="value-card">
                     <h3>CUTTING-EDGE</h3>
                     <p>Utilizing the latest technologies, we stay ahead of the curve.</p>
@@ -55,11 +81,67 @@
 
             <div class="contact-section">
                 <h2>GET IN TOUCH</h2>
-                <a href="/Weatherly/pages/contact.html" class="contact-btn">Contact Us</a>
+                <a href="contact.html" class="contact-btn">Contact Us</a>
             </div>
         </div>
     </main>
 
-    <script src="js/about.js"></script>
+    <!-- Footer -->
+    <footer class="bg-dark text-white mt-auto">
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <p class="mb-0">&copy; 2025 Weatherly. All rights reserved.</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <p class="mb-2 text-white-50">Download our app:</p>
+                    <div class="d-flex justify-content-center gap-2">
+                        <a href="https://apps.apple.com/app/weatherly-app" target="_blank" class="me-2">
+                            <img src="../assets/images/App-store.png" alt="Download on the App Store" class="img-fluid"
+                                height="40px">
+                        </a>
+                        <a href="https://play.google.com/store/apps/details?id=com.weatherly.app" target="_blank">
+                            <img src="../assets/images/Google-Play.png" alt="Get it on Google Play" height="40">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <a href="#" class="text-white text-decoration-none me-3">Privacy Policy</a>
+                    <a href="#" class="text-white text-decoration-none">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/about.js"></script>
+    <script>
+        // Theme toggle functionality from main script
+        $("#themeToggle").click(function (e) {
+            e.preventDefault();
+            $("body").toggleClass("dark-mode");
+
+            if ($("body").hasClass("dark-mode")) {
+                $("#themeToggle i").removeClass("bi-moon-stars").addClass("bi-sun");
+            } else {
+                $("#themeToggle i").removeClass("bi-sun").addClass("bi-moon-stars");
+            }
+
+            localStorage.setItem(
+                "theme",
+                $("body").hasClass("dark-mode") ? "dark" : "light"
+            );
+        });
+
+        // Initialize Theme
+        const savedTheme = localStorage.getItem("theme") || "light";
+        $("body").toggleClass("dark-mode", savedTheme === "dark");
+
+        if (savedTheme === "dark") {
+            $("#themeToggle i").removeClass("bi-moon-stars").addClass("bi-sun");
+        }
+    </script>
 </body>
+
 </html>
