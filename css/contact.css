@@ -51,5 +51,7 @@
 }
 
 .contact-form .contact-btn:hover {
-    background-color: #005fa3;
+    transform: scale(1.01);
+    transition: transform 0.2s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
