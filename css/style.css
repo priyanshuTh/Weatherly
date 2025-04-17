@@ -19,7 +19,7 @@ body {
 /*Navbar*/
 .navbar {
     background-color: var(--primary-color);
-    padding: 0.8rem 1rem;
+    padding: 0.8 rem 1rem;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -31,7 +31,14 @@ body {
 }
 
 .navbar .nav-link:hover {
-    color: #ffffff !important;
+    text-decoration: underline;
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+}
+
+.navbar .nav-link.active {
+    font-weight: bold;
+    text-decoration: underline;
 }
 
 .site-logo {
@@ -269,7 +276,7 @@ body.dark-mode .weather-card .border-secondary {
     border-radius: 0 0 12px 12px;
 }
 
-/* ----- Recent Places ----- */
+/* Recent Places */
 .recent-places {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 6px;

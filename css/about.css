@@ -1,0 +1,124 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    line-height: 1.6;
+    background-color: #f0f4f8;
+}
+
+.container h1 {
+    font-size: 2.5rem;
+    color: #000000;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+body.dark-mode .container h1 {
+    color: #2980b9;
+}
+
+.about-content {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(171, 133, 133, 0.1);
+    margin-bottom: 40px;
+}
+
+.about-content:hover {
+    transform: scale(1.02);
+    transition: transform 0.3s ease;
+    box-shadow: 0 5px 15px rgba(171, 133, 133, 0.2);
+}
+
+body.dark-mode .about-content {
+    background: #2d2d2d;
+}
+
+.pragraph {
+    font-size: 1.1rem;
+    color: #000000;
+    margin-bottom: 25px;
+    line-height: 1.8;
+}
+
+body.dark-mode .pragraph {
+    color: #fafafa;
+}
+
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin: 50px 0;
+}
+
+.value-card {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.3s ease;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .value-card {
+    background: #2d2d2d;
+}
+
+.value-card:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.value-card h3 {
+    color: #2980b9;
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+}
+
+.value-card p {
+    color: #7f8c8d;
+    font-size: 0.95rem;
+}
+
+body.dark-mode .value-card p {
+    color: #fafafa;
+}
+
+.contact-section {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.contact-btn {
+    display: inline-block;
+    padding: 15px 40px;
+    background: #2980b9;
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.contact-btn:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    .about-content {
+        padding: 25px;
+    }
+}

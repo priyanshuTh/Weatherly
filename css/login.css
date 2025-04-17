@@ -1,0 +1,245 @@
+@import url('https://cdn.tailwindcss.com');
+
+body {
+    background: linear-gradient(to right, #f7f7f7, #d1d5db);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+body.dark-mode {
+    background: linear-gradient(to right, #1a1a1a, #2d2d2d);
+    color: #fff;
+}
+
+/* Login page wrapper */
+.login-wrapper {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.login-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    width: 100%;
+}
+
+/* Main login box */
+.login-box {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+body.dark-mode .login-box {
+    background: #2d2d2d;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Headline text */
+h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 16px;
+    color: #111827;
+}
+
+body.dark-mode h2 {
+    color: #fff;
+}
+
+/* Input field wrapper */
+.input-group {
+    position: relative;
+    margin-bottom: 16px;
+}
+
+/* Styled input fields */
+.input-group input {
+    width: 100%;
+    padding: 10px 40px;
+    border: 1px solid #ccc;
+    border-radius: 50px;
+    background: #f3f4f6;
+    color: #374151;
+    outline: none;
+    transition: 0.3s;
+    box-sizing: border-box;
+}
+
+body.dark-mode .input-group input {
+    background: #3a3a3a;
+    border-color: #555;
+    color: #fff;
+}
+
+/* On focus */
+.input-group input:focus {
+    border-color: #9ca3af;
+    box-shadow: 0 0 5px rgba(156, 163, 175, 0.5);
+}
+
+body.dark-mode .input-group input:focus {
+    border-color: #6ea8fe;
+    box-shadow: 0 0 5px rgba(110, 168, 254, 0.5);
+}
+
+/* Icon positioning */
+.icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    pointer-events: none;
+}
+
+body.dark-mode .icon {
+    color: #adb5bd;
+}
+
+.icon.right {
+    right: 12px;
+    left: auto;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+/* Options section (Remember me / Forgot password) */
+.options {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 16px;
+}
+
+body.dark-mode .options {
+    color: #adb5bd;
+}
+
+.options a {
+    text-decoration: none;
+    color: #6b7280;
+    transition: color 0.2s;
+}
+
+body.dark-mode .options a {
+    color: #adb5bd;
+}
+
+.options a:hover {
+    color: #374151;
+}
+
+body.dark-mode .options a:hover {
+    color: #fff;
+}
+
+/* Button base style */
+.btn {
+    width: 100%;
+    padding: 10px;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    border: none;
+}
+
+/* Primary login button */
+.login-btn {
+    background: black;
+    color: white;
+}
+
+body.dark-mode .login-btn {
+    background: #1d70b8;
+}
+
+.login-btn:hover {
+    background: #111827;
+}
+
+body.dark-mode .login-btn:hover {
+    background: #0d6efd;
+}
+
+/* Sign up / secondary action */
+.signup-btn {
+    background: #e5e7eb;
+    color: #6b7280;
+}
+
+body.dark-mode .signup-btn {
+    background: #444;
+    color: #adb5bd;
+}
+
+.signup-btn:hover {
+    background: #d1d5db;
+}
+
+body.dark-mode .signup-btn:hover {
+    background: #555;
+}
+
+/* Divider line/text */
+.divider {
+    color: #6b7280;
+    margin: 16px 0;
+    position: relative;
+    text-align: center;
+}
+
+body.dark-mode .divider {
+    color: #adb5bd;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background: #d1d5db;
+}
+
+body.dark-mode .divider::before,
+body.dark-mode .divider::after {
+    background: #555;
+}
+
+.divider::before {
+    left: 0;
+}
+
+.divider::after {
+    right: 0;
+}
+
+@media (max-width: 576px) {
+    .login-box {
+        padding: 1.5rem;
+    }
+}
+
+*/ .nav-link.active {
+    text-decoration: underline;
+    /* Keep underline for the active page */
+    font-weight: bold;
+    /* Optional: Make the active link bold */
+    color: #007bff !important;
+    /* Optional: Highlight the active link */
+}
