@@ -234,12 +234,3 @@ body.dark-mode .divider::after {
         padding: 1.5rem;
     }
 }
-
-*/ .nav-link.active {
-    text-decoration: underline;
-    /* Keep underline for the active page */
-    font-weight: bold;
-    /* Optional: Make the active link bold */
-    color: #007bff !important;
-    /* Optional: Highlight the active link */
-}
