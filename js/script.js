@@ -183,6 +183,7 @@ $(document).ready(function () {
     );
 
     // Weather Data
+    $("#temp").text(`${Math.round(data.main.temp)}°C`);
     $("#tempMinMax").html(
       `${Math.round(data.main.temp_min)}°C / ${Math.round(
         data.main.temp_max
