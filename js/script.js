@@ -150,7 +150,7 @@ $(document).ready(function () {
 
   // OpenWeatherMap API Integration
   async function getWeatherData(location) {
-    const API_KEY = "95425a4f1ff33420efb87cc0706610af";
+    const API_KEY = import.meta.env.VITE_API_KEY;
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(
       location
     )}&appid=${API_KEY}&units=metric`;
