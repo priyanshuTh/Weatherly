@@ -6,11 +6,10 @@ $(document).ready(function () {
   });
 
   // Preloader Handling
-  setTimeout(function () {
+  setTimeout(() => {
     $(".preloader").addClass("active");
-
-    setTimeout(function () {
-      $(".preloader").fadeOut(500, function () {
+    setTimeout(() => {
+      $(".preloader").fadeOut(500, () => {
         document.body.classList.add("loaded");
       });
     }, 1000);
@@ -34,7 +33,6 @@ $(document).ready(function () {
     date.setFullYear(date.getFullYear() + 1);
     document.cookie = `noticeSeen=true; expires=${date.toUTCString()}; path=/`;
     $(".cookie-consent").removeClass("active");
-    updateRecentSearches();
   }
 
   $("#dismissCookieNotice").click(dismissCookieNotice);
@@ -150,7 +148,7 @@ $(document).ready(function () {
 
   // OpenWeatherMap API Integration
   async function getWeatherData(location) {
-    const API_KEY = import.meta.env.VITE_API_KEY;
+    const API_KEY = "95425a4f1ff33420efb87cc0706610af";
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(
       location
     )}&appid=${API_KEY}&units=metric`;
@@ -235,39 +233,49 @@ $(document).ready(function () {
     weatherMap.setView([data.coord.lat, data.coord.lon], 8);
   }
 
-  // Recent Searches
   function addRecentSearch(location) {
-    const searches = JSON.parse(localStorage.getItem("recentSearches") || "[]");
-    if (!searches.includes(location)) {
-      searches.unshift(location);
-      localStorage.setItem(
-        "recentSearches",
-        JSON.stringify(searches.slice(0, 5))
-      );
-      updateRecentSearches();
-    }
+    const normalizedLocation = location.trim().toLowerCase();
+    let searches = JSON.parse(localStorage.getItem("recentSearches") || "[]");
+
+    // Remove duplicates (case-insensitive)
+    searches = searches.filter(
+      (item) => item.toLowerCase() !== normalizedLocation
+    );
+    searches.unshift(location); // Add to top
+
+    localStorage.setItem(
+      "recentSearches",
+      JSON.stringify(searches.slice(0, 5))
+    );
+    updateRecentSearches();
   }
 
   function updateRecentSearches() {
-    const searches = JSON.parse(localStorage.getItem("recentSearches") || "[]");
+    let searches = [];
+    try {
+      searches = JSON.parse(localStorage.getItem("recentSearches")) || [];
+    } catch {
+      localStorage.setItem("recentSearches", "[]");
+    }
+
     $(".recent-searches").empty();
+
     if (searches.length > 0) {
       searches.forEach((location) => {
         const safeLocation = $("<div>").text(location).html();
-        $(".recent-searches").append(
-          `<a href="#" class="list-group-item list-group-item-action bg-transparent text-white border-0 d-flex align-items-center" 
+        $(".recent-searches").append(`
+          <a href="#" class="list-group-item list-group-item-action bg-transparent border-0 d-flex align-items-center" 
              data-location="${safeLocation}">
             <i class="bi bi-geo-alt me-2"></i>
             ${safeLocation}
-          </a>`
-        );
+          </a>
+        `);
       });
-      $(".recent-places p").hide();
+      $(".recent-places p").addClass("d-none");
     } else {
-      $(".recent-places p").show();
+      $(".recent-places p").removeClass("d-none");
     }
   }
-  updateRecentSearches();
 
   $(".recent-searches").on("click", "[data-location]", function (e) {
     e.preventDefault();
