@@ -34,7 +34,7 @@ Weatherly is a modern, responsive weather web‑app that delivers real‑time fo
 
 ## Live Demo
 
-> Coming soon – you can deploy your own instance in minutes with **GitHub Pages**, **Vercel**, **Netlify**, or any static host.
+>https://priyanshuth.github.io/Weatherly/index.html
 
 ## Tech Stack
 
