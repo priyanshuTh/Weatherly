@@ -4,12 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Weatherly - Your personalized weather forecast companion with real-time updates and interactive maps">
     <title>Weatherly - Smart Weather Forecast</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/png" href="assets/images/logo.png">
+    <!-- Preload critical assets -->
+    <link rel="preload" href="assets/images/logo.png" as="image">
 </head>
 
 <body>
@@ -17,7 +21,9 @@
     <div class="preloader">
         <img src="assets/images/logo.png" alt="Weatherly logo" class="w-20 h-20">
         <h1 class="text-primary fw-bold">Weatherly</h1>
-        <div class="spinner-border text-primary" role="status"></div>
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
         <p class="mt-3 text-muted">Loading your weather companion...</p>
     </div>
 
@@ -33,9 +39,10 @@
                     <a class="nav-link btn btn-outline btn-sm ms-2 py-1" href="pages/about.html">About Us</a>
                     <a class="nav-link btn btn-outline btn-sm ms-2 py-1" href="pages/login.html">Login</a>
                     <a class="nav-link btn btn-outline btn-sm ms-2 py-1" href="pages/signup.html">Sign Up</a>
-                    <a href="#" id="themeToggle" class="nav-link ms-3">
+                    <button id="themeToggle" class="nav-link ms-3 btn btn-link border-0 p-0">
                         <i class="bi bi-moon-stars"></i>
-                    </a>
+                        <span class="visually-hidden">Toggle theme</span>
+                    </button>
                 </div>
             </div>
         </nav>
@@ -55,57 +62,151 @@
                                         placeholder="Search for a place" aria-label="Search location" id="searchInput">
                                     <button class="btn btn-primary" type="submit">
                                         <i class="bi bi-search"></i>
+                                        <span class="visually-hidden">Search</span>
                                     </button>
                                 </div>
 
-                                <!-- Weather Results -->
-                                <div id="weatherResults" class="mt-4 card d-none bg-transparent weather-card">
-                                    <div class="card-body bg-dark text-black rounded-3">
-                                        <div class="row">
-                                            <div class="col-md-4 text-center border-end border-secondary">
-                                                <h3 id="locationName" class="mb-3 text-primary"></h3>
+                                <!-- Enhanced Weather Card -->
+                                <div id="weatherResults" class="mt-4 d-none">
+                                    <div class="card shadow border-0 weather-card">
+                                        <div class="card-body p-0">
+                                            <div class="row g-0">
+                                                <!-- Left side with location and weather icon -->
+                                                <div class="col-md-4 p-4 weather-info-side">
+                                                    <h3 id="locationName" class="fw-bold text-primary text-center mb-4">
+                                                    </h3>
 
-                                                <!-- New Time Display Section -->
-                                                <div class="location-time-container mb-3">
-                                                    <div class="time-icon-container">
-                                                        <i class="bi bi-clock text-info"></i>
+                                                    <!-- Time Display -->
+                                                    <div class="weather-time-container mb-4">
+                                                        <div class="d-flex justify-content-center mb-2">
+                                                            <i class="bi bi-clock text-info fs-4"></i>
+                                                        </div>
+                                                        <h4 id="locationTime" class="time-display text-info mb-0"></h4>
+                                                        <p id="locationDate" class="text-muted mb-0"></p>
                                                     </div>
-                                                    <h4 id="locationTime" class="mb-0 text-info time-display"></h4>
-                                                    <p id="locationDate" class="text-muted small mb-2"></p>
+
+                                                    <!-- Weather Icon -->
+                                                    <div class="weather-icon-container text-center">
+                                                        <div id="weatherIcon" class="mb-3"></div>
+                                                        <p id="weatherDescription" class="mb-0 text-muted"></p>
+                                                    </div>
                                                 </div>
 
-                                                <div id="weatherIcon" class="text-center"></div>
-                                                <p id="weatherDescription" class="lead text-muted"></p>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <div class="row">
-                                                    <div class="col-6">
-                                                        <p class="mb-1"><i
-                                                                class="bi bi-thermometer-half me-2"></i>Temperature:
-                                                            <span id="temp" class="text-info"></span>
-                                                        </p>
-                                                        <p class="mb-1"><i class="bi bi-moisture me-2"></i>Feels Like:
-                                                            <span id="feelsLike" class="text-info"></span>
-                                                        </p>
-                                                        <p class="mb-1"><i class="bi bi-droplet me-2"></i>Humidity:
-                                                            <span id="humidity" class="text-info"></span>
-                                                        </p>
-                                                        <p class="mb-1"><i class="bi bi-speedometer2 me-2"></i>Pressure:
-                                                            <span id="pressure" class="text-info"></span>
-                                                        </p>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <p class="mb-1"><i
-                                                                class="bi bi-thermometer-low me-2"></i>Min/Max: <span
-                                                                id="tempMinMax" class="text-info"></span></p>
-                                                        <p class="mb-1"><i class="bi bi-wind me-2"></i>Wind: <span
-                                                                id="windSpeed" class="text-info"></span></p>
-                                                        <p class="mb-1"><i class="bi bi-clouds me-2"></i>Clouds: <span
-                                                                id="cloudCover" class="text-info"></span></p>
-                                                        <p class="mb-1"><i class="bi bi-sunrise me-2"></i>Sunrise: <span
-                                                                id="sunrise" class="text-info"></span></p>
-                                                        <p class="mb-1"><i class="bi bi-sunset me-2"></i>Sunset: <span
-                                                                id="sunset" class="text-info"></span></p>
+                                                <!-- Right side with weather details -->
+                                                <div class="col-md-8 p-4 weather-data-side">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="weather-detail-item mb-3">
+                                                                <div class="d-flex align-items-center">
+                                                                    <i
+                                                                        class="bi bi-thermometer-half me-2 text-primary"></i>
+                                                                    <div>
+                                                                        <small
+                                                                            class="weather-detail-label">Temperature</small>
+                                                                        <span id="temp"
+                                                                            class="weather-detail-value"></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="weather-detail-item mb-3">
+                                                                <div class="d-flex align-items-center">
+                                                                    <i class="bi bi-moisture me-2 text-primary"></i>
+                                                                    <div>
+                                                                        <small class="weather-detail-label">Feels
+                                                                            Like</small>
+                                                                        <span id="feelsLike"
+                                                                            class="weather-detail-value"></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="weather-detail-item mb-3">
+                                                                <div class="d-flex align-items-center">
+                                                                    <i class="bi bi-droplet me-2 text-primary"></i>
+                                                                    <div>
+                                                                        <small
+                                                                            class="weather-detail-label">Humidity</small>
+                                                                        <span id="humidity"
+                                                                            class="weather-detail-value"></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="weather-detail-item mb-3">
+                                                                <div class="d-flex align-items-center">
+                                                                    <i class="bi bi-speedometer2 me-2 text-primary"></i>
+                                                                    <div>
+                                                                        <small
+                                                                            class="weather-detail-label">Pressure</small>
+                                                                        <span id="pressure"
+                                                                            class="weather-detail-value"></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div class="weather-detail-item mb-3">
+                                                                <div class="d-flex align-items-center">
+                                                                    <i
+                                                                        class="bi bi-thermometer-low me-2 text-primary"></i>
+                                                                    <div>
+                                                                        <small
+                                                                            class="weather-detail-label">Min/Max</small>
+                                                                        <span id="tempMinMax"
+                                                                            class="weather-detail-value"></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="weather-detail-item mb-3">
+                                                                <div class="d-flex align-items-center">
+                                                                    <i class="bi bi-wind me-2 text-primary"></i>
+                                                                    <div>
+                                                                        <small class="weather-detail-label">Wind</small>
+                                                                        <span id="windSpeed"
+                                                                            class="weather-detail-value"></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="weather-detail-item mb-3">
+                                                                <div class="d-flex align-items-center">
+                                                                    <i class="bi bi-clouds me-2 text-primary"></i>
+                                                                    <div>
+                                                                        <small
+                                                                            class="weather-detail-label">Clouds</small>
+                                                                        <span id="cloudCover"
+                                                                            class="weather-detail-value"></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="weather-detail-item mb-3">
+                                                                <div class="d-flex align-items-center">
+                                                                    <i class="bi bi-sunrise me-2 text-primary"></i>
+                                                                    <div>
+                                                                        <small
+                                                                            class="weather-detail-label">Sunrise</small>
+                                                                        <span id="sunrise"
+                                                                            class="weather-detail-value"></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="weather-detail-item mb-3">
+                                                                <div class="d-flex align-items-center">
+                                                                    <i class="bi bi-sunset me-2 text-primary"></i>
+                                                                    <div>
+                                                                        <small
+                                                                            class="weather-detail-label">Sunset</small>
+                                                                        <span id="sunset"
+                                                                            class="weather-detail-value"></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -148,8 +249,8 @@
                             </figure>
                             <h3>Weather Maps</h3>
                             <p>Interactive maps showing precipitation, temperature, wind, and more.</p>
-                            <a href="#" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
-                                data-bs-target="#mapsModal">Explore Maps</a>
+                            <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#mapsModal">Explore Maps</button>
                         </div>
                     </article>
                     <article class="col-md-4 mb-4">
@@ -169,7 +270,7 @@
         <!-- Video Forecast Section -->
         <section class="video-section">
             <div class="container">
-                <h2 class="section-title"> Video Forecast</h2>
+                <h2 class="section-title">Video Forecast</h2>
                 <div class="row justify-content-center">
                     <div class="col-lg-10">
                         <div class="card shadow-sm">
@@ -182,6 +283,9 @@
                                 <figure class="ratio ratio-16x9 m-0">
                                     <video class="rounded" controls poster="assets/images/video_forecast.png">
                                         <source src="assets/videos/video_forecast.mp4" type="video/mp4">
+                                        <p>Your browser doesn't support HTML5 video. Here's a
+                                            <a href="assets/videos/video_forecast.mp4">link to the video</a> instead.
+                                        </p>
                                     </video>
                                 </figure>
                             </div>
@@ -202,12 +306,14 @@
                 <div class="col-md-4 text-center">
                     <p class="mb-2 text-white-50">Download our app:</p>
                     <div class="d-flex justify-content-center gap-2">
-                        <a href="https://apps.apple.com/app/weatherly-app" target="_blank" class="me-2">
+                        <a href="https://apps.apple.com/app/weatherly-app" target="_blank" rel="noopener" class="me-2">
                             <img src="assets/images/App-store.png" alt="Download on the App Store" class="img-fluid"
-                                height="40px">
+                                height="40" width="120">
                         </a>
-                        <a href="https://play.google.com/store/apps/details?id=com.weatherly.app" target="_blank">
-                            <img src="assets/images/Google-Play.png" alt="Get it on Google Play" height="40">
+                        <a href="https://play.google.com/store/apps/details?id=com.weatherly.app" target="_blank"
+                            rel="noopener">
+                            <img src="assets/images/Google-Play.png" alt="Get it on Google Play" height="40"
+                                width="135">
                         </a>
                     </div>
                 </div>
@@ -252,12 +358,12 @@
     </div>
 
     <!-- Weather Maps Modal -->
-    <div class="modal fade" id="mapsModal" tabindex="-1">
+    <div class="modal fade" id="mapsModal" tabindex="-1" aria-labelledby="mapsModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Interactive Weather Map</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <h5 class="modal-title" id="mapsModalLabel">Interactive Weather Map</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-0">
                     <div id="weatherMap" style="height: 60vh;"></div>
@@ -265,12 +371,15 @@
             </div>
         </div>
     </div>
+
+    <!-- Toast container for notifications -->
     <div id="toast-container" class="position-fixed top-0 end-0 p-3"></div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="js/script.js"></script>
+    <!-- Load scripts with defer for better performance -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" defer></script>
+    <script src="js/script.js" defer></script>
 </body>
 
 </html>

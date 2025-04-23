@@ -1,76 +1,100 @@
 $(document).ready(function () {
+  // Constants
+  const API_KEY = "95425a4f1ff33420efb87cc0706610af";
+  const WEATHER_API_BASE = "https://api.openweathermap.org/data/2.5/weather";
+  const WEATHER_MAP_TILE_BASE = "https://tile.openweathermap.org/map";
+
+  // Global variables
+  let weatherMap;
+  let locationClockInterval = null;
+
   // Navbar brand click handler
   $(".navbar-brand").click(function (e) {
     e.preventDefault();
     window.location.reload();
   });
 
-  // Preloader Handling
-  setTimeout(() => {
-    $(".preloader").addClass("active");
+  // Preloader Handling with performance optimization
+  const initPreloader = () => {
     setTimeout(() => {
-      $(".preloader").fadeOut(500, () => {
-        document.body.classList.add("loaded");
-      });
-    }, 1000);
-  }, 500);
+      $(".preloader").addClass("active");
+      setTimeout(() => {
+        $(".preloader").fadeOut(500, () => {
+          document.body.classList.add("loaded");
+        });
+      }, 1000);
+    }, 500);
+  };
+  initPreloader();
 
   // Cookie Notice Management
-  function hasSeenCookieNotice() {
-    return document.cookie.includes("noticeSeen=true");
-  }
+  const cookieManager = (() => {
+    const hasSeenCookieNotice = () =>
+      document.cookie.includes("noticeSeen=true");
 
-  function showCookieNotice() {
-    if (!hasSeenCookieNotice()) {
-      setTimeout(function () {
-        $(".cookie-consent").addClass("active");
-      }, 2000);
-    }
-  }
+    const showCookieNotice = () => {
+      if (!hasSeenCookieNotice()) {
+        setTimeout(() => $(".cookie-consent").addClass("active"), 2000);
+      }
+    };
 
-  function dismissCookieNotice() {
-    const date = new Date();
-    date.setFullYear(date.getFullYear() + 1);
-    document.cookie = `noticeSeen=true; expires=${date.toUTCString()}; path=/`;
-    $(".cookie-consent").removeClass("active");
-  }
+    const dismissCookieNotice = () => {
+      const date = new Date();
+      date.setFullYear(date.getFullYear() + 1);
+      document.cookie = `noticeSeen=true; expires=${date.toUTCString()}; path=/`;
+      $(".cookie-consent").removeClass("active");
+    };
 
-  $("#dismissCookieNotice").click(dismissCookieNotice);
-  showCookieNotice();
+    return { showCookieNotice, dismissCookieNotice };
+  })();
 
-  // Theme Toggle
+  $("#dismissCookieNotice").click(cookieManager.dismissCookieNotice);
+  cookieManager.showCookieNotice();
+
+  // Theme Toggle with localStorage caching
+  const themeManager = (() => {
+    const toggleTheme = () => {
+      $("body").toggleClass("dark-mode");
+      const isDarkMode = $("body").hasClass("dark-mode");
+
+      $("#themeToggle i")
+        .removeClass(isDarkMode ? "bi-moon-stars" : "bi-sun")
+        .addClass(isDarkMode ? "bi-sun" : "bi-moon-stars");
+
+      localStorage.setItem("theme", isDarkMode ? "dark" : "light");
+
+      // Update preloader if it's still visible
+      if (isDarkMode && !document.body.classList.contains("loaded")) {
+        $(".preloader").css("background-color", "#1a1a1a");
+        $(".preloader .text-muted").css("color", "#adb5bd");
+      }
+    };
+
+    const initTheme = () => {
+      const savedTheme = localStorage.getItem("theme") || "light";
+      if (savedTheme === "dark") {
+        $("body").addClass("dark-mode");
+        $("#themeToggle i").removeClass("bi-moon-stars").addClass("bi-sun");
+        $(".preloader").css("background-color", "#1a1a1a");
+        $(".preloader .text-muted").css("color", "#adb5bd");
+      }
+    };
+
+    return { toggleTheme, initTheme };
+  })();
+
   $("#themeToggle").click(function (e) {
     e.preventDefault();
-    $("body").toggleClass("dark-mode");
-
-    if ($("body").hasClass("dark-mode")) {
-      $("#themeToggle i").removeClass("bi-moon-stars").addClass("bi-sun");
-    } else {
-      $("#themeToggle i").removeClass("bi-sun").addClass("bi-moon-stars");
-    }
-
-    localStorage.setItem(
-      "theme",
-      $("body").hasClass("dark-mode") ? "dark" : "light"
-    );
+    themeManager.toggleTheme();
   });
 
-  // Initialize Theme
-  const savedTheme = localStorage.getItem("theme") || "light";
-  $("body").toggleClass("dark-mode", savedTheme === "dark");
-
-  if (savedTheme === "dark") {
-    $("#themeToggle i").removeClass("bi-moon-stars").addClass("bi-sun");
-    $(".preloader").css("background-color", "#1a1a1a");
-    $(".preloader .text-muted").css("color", "#adb5bd");
-  }
+  themeManager.initTheme();
 
   // Seasonal Background
-  function updateSeasonalBackground() {
+  const updateSeasonalBackground = () => {
     const date = new Date();
     const month = date.getMonth();
-    let season;
-    let backgroundImage;
+    let season, backgroundImage;
 
     if (month >= 2 && month <= 4) {
       season = "spring";
@@ -88,54 +112,60 @@ $(document).ready(function () {
 
     $(".hero-section").css("background-image", `url('${backgroundImage}')`);
     $(".hero-section").attr("data-season", season);
-  }
+  };
   updateSeasonalBackground();
 
   // Weather Map Functionality
-  let weatherMap;
-  $("#mapsModal").on("shown.bs.modal", function () {
-    if (!weatherMap) {
-      weatherMap = L.map("weatherMap").setView([0, 0], 2);
+  const initWeatherMap = () => {
+    if (weatherMap) return; // Map already initialized
 
-      // Base layers
-      const baseLayers = {
-        "Street Map": L.tileLayer(
-          "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?lang=en",
-          {
-            attribution: "© OpenStreetMap contributors",
-          }
-        ),
-      };
+    weatherMap = L.map("weatherMap").setView([0, 0], 2);
 
-      // Overlay layers
-      const overlayMaps = {
-        Temperature: L.tileLayer(
-          `https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=95425a4f1ff33420efb87cc0706610af`,
-          { maxZoom: 20, opacity: 0.5 }
-        ),
-        "Wind Speed": L.tileLayer(
-          `https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=95425a4f1ff33420efb87cc0706610af`,
-          { maxZoom: 20, opacity: 0.5 }
-        ),
-        Precipitation: L.tileLayer(
-          `https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=95425a4f1ff33420efb87cc0706610af`,
-          { maxZoom: 20, opacity: 0.5 }
-        ),
-      };
+    // Base layers
+    const baseLayers = {
+      "Street Map": L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?lang=en",
+        {
+          attribution: "© OpenStreetMap contributors",
+        }
+      ),
+    };
 
-      // Add default layers
-      baseLayers["Street Map"].addTo(weatherMap);
-      overlayMaps["Temperature"].addTo(weatherMap);
+    // Overlay layers
+    const overlayMaps = {
+      Temperature: L.tileLayer(
+        `${WEATHER_MAP_TILE_BASE}/temp_new/{z}/{x}/{y}.png?appid=${API_KEY}`,
+        { maxZoom: 20, opacity: 0.5 }
+      ),
+      "Wind Speed": L.tileLayer(
+        `${WEATHER_MAP_TILE_BASE}/wind_new/{z}/{x}/{y}.png?appid=${API_KEY}`,
+        { maxZoom: 20, opacity: 0.5 }
+      ),
+      Precipitation: L.tileLayer(
+        `${WEATHER_MAP_TILE_BASE}/precipitation_new/{z}/{x}/{y}.png?appid=${API_KEY}`,
+        { maxZoom: 20, opacity: 0.5 }
+      ),
+    };
 
-      // Add layer control
-      L.control
-        .layers(baseLayers, overlayMaps, {
-          collapsed: false,
-          position: "bottomright",
-        })
-        .addTo(weatherMap);
-    }
-  });
+    // Add default layers
+    baseLayers["Street Map"].addTo(weatherMap);
+    overlayMaps["Temperature"].addTo(weatherMap);
+
+    // Add layer control
+    L.control
+      .layers(baseLayers, overlayMaps, {
+        collapsed: false,
+        position: "bottomright",
+      })
+      .addTo(weatherMap);
+
+    // Fix Leaflet rendering issues in Bootstrap modal
+    setTimeout(() => {
+      weatherMap.invalidateSize();
+    }, 100);
+  };
+
+  $("#mapsModal").on("shown.bs.modal", initWeatherMap);
 
   // Weather Search Functionality
   $("#searchForm").submit(async function (e) {
@@ -143,19 +173,23 @@ $(document).ready(function () {
     const location = $(this).find("input").val().trim();
     if (location) {
       await performSearch(location);
+    } else {
+      showToast("Please enter a location to search");
     }
   });
 
   // OpenWeatherMap API Integration
   async function getWeatherData(location) {
-    const API_KEY = "95425a4f1ff33420efb87cc0706610af";
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(
+    const url = `${WEATHER_API_BASE}?q=${encodeURIComponent(
       location
     )}&appid=${API_KEY}&units=metric`;
 
     try {
       const response = await fetch(url);
-      if (!response.ok) throw new Error("Weather data unavailable");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Weather data unavailable");
+      }
       return await response.json();
     } catch (error) {
       if (error.message === "Failed to fetch") {
@@ -164,9 +198,6 @@ $(document).ready(function () {
       throw error;
     }
   }
-
-  // Global variable to store the interval ID
-  let locationClockInterval = null;
 
   // Function to update the location time based on timezone offset
   function updateLocationTime(timezoneOffset) {
@@ -214,9 +245,52 @@ $(document).ready(function () {
     }, 1000);
   }
 
+  // Storage manager for recent searches
+  const storageManager = (() => {
+    const STORAGE_KEY = "recentSearches";
+    const MAX_SEARCHES = 5;
+
+    const getSearches = () => {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      } catch {
+        localStorage.setItem(STORAGE_KEY, "[]");
+        return [];
+      }
+    };
+
+    const addSearch = (location) => {
+      const normalizedLocation = location.trim();
+      if (!normalizedLocation) return;
+
+      let searches = getSearches();
+
+      // Remove duplicates (case-insensitive)
+      searches = searches.filter(
+        (item) => item.toLowerCase() !== normalizedLocation.toLowerCase()
+      );
+
+      // Add to top
+      searches.unshift(normalizedLocation);
+
+      // Limit to max searches
+      searches = searches.slice(0, MAX_SEARCHES);
+
+      // Save back to localStorage
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(searches));
+    };
+
+    return { getSearches, addSearch };
+  })();
+
   // Weather Display Function
   function displayWeather(data) {
+    // Remove d-none class to make container visible
     $("#weatherResults").removeClass("d-none");
+
+    // Reset any previous animation/transition classes
+    $("#weatherResults").removeClass("show");
+    $(".weather-card").removeClass("show");
 
     // Main Information
     $("#locationName").text(`${data.name}, ${data.sys.country}`);
@@ -225,14 +299,11 @@ $(document).ready(function () {
       `<img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@4x.png" 
        alt="${data.weather[0].description}" 
        class="img-fluid shadow-sm rounded"
-       width="200" 
-       height="200">`
+       width="120" 
+       height="120">`
     );
 
-    // Calculate and display local time
-    updateLocationTime(data.timezone);
-
-    // Start the local time interval
+    // Start the local time interval with timezone
     startLocationClock(data.timezone);
 
     // Weather Data
@@ -263,10 +334,12 @@ $(document).ready(function () {
 
     // Update map markers if the map exists
     if (weatherMap) {
+      // Remove existing markers
       weatherMap.eachLayer((layer) => {
         if (layer instanceof L.Marker) weatherMap.removeLayer(layer);
       });
 
+      // Add new marker
       const marker = L.marker([data.coord.lat, data.coord.lon]).addTo(
         weatherMap
       ).bindPopup(`
@@ -290,43 +363,25 @@ $(document).ready(function () {
       weatherMap.setView([data.coord.lat, data.coord.lon], 8);
     }
 
-    // Add animation class after a small delay
+    // Add animation class after a small delay for smooth transition
+    // Apply to both the container and the card itself for proper animation
     setTimeout(() => {
       $("#weatherResults").addClass("show");
+      $(".weather-card").addClass("show");
     }, 100);
   }
 
-  function addRecentSearch(location) {
-    const normalizedLocation = location.trim().toLowerCase();
-    let searches = JSON.parse(localStorage.getItem("recentSearches") || "[]");
-
-    // Remove duplicates (case-insensitive)
-    searches = searches.filter(
-      (item) => item.toLowerCase() !== normalizedLocation
-    );
-    searches.unshift(location); // Add to top
-
-    localStorage.setItem(
-      "recentSearches",
-      JSON.stringify(searches.slice(0, 5))
-    );
-    updateRecentSearches();
-  }
-
+  // Update recent searches UI
   function updateRecentSearches() {
-    let searches = [];
-    try {
-      searches = JSON.parse(localStorage.getItem("recentSearches")) || [];
-    } catch {
-      localStorage.setItem("recentSearches", "[]");
-    }
+    const searches = storageManager.getSearches();
+    const $container = $(".recent-searches");
 
-    $(".recent-searches").empty();
+    $container.empty();
 
     if (searches.length > 0) {
       searches.forEach((location) => {
         const safeLocation = $("<div>").text(location).html();
-        $(".recent-searches").append(`
+        $container.append(`
           <a href="#" class="list-group-item list-group-item-action bg-transparent border-0 d-flex align-items-center" 
              data-location="${safeLocation}">
             <i class="bi bi-geo-alt me-2"></i>
@@ -340,6 +395,7 @@ $(document).ready(function () {
     }
   }
 
+  // Click handler for recent searches
   $(".recent-searches").on("click", "[data-location]", function (e) {
     e.preventDefault();
     const location = $(this).data("location");
@@ -347,7 +403,7 @@ $(document).ready(function () {
     performSearch(location);
   });
 
-  // Clear the interval when a new search is performed
+  // Main search function
   async function performSearch(location) {
     try {
       if (!location) {
@@ -361,18 +417,26 @@ $(document).ready(function () {
       }
 
       showToast(`Searching for ${location}...`);
+
+      // Hide weather results with animation
       $("#weatherResults").removeClass("show");
-      $("#weatherResults").addClass("d-none");
+      $(".weather-card").removeClass("show");
+
+      // Use timeout to ensure animation completes before hiding
+      setTimeout(() => {
+        $("#weatherResults").addClass("d-none");
+      }, 300);
 
       const weatherData = await getWeatherData(location);
       displayWeather(weatherData);
-      addRecentSearch(location);
+      storageManager.addSearch(location);
+      updateRecentSearches();
     } catch (error) {
       showToast(error.message || "Failed to get weather data");
     }
   }
 
-  // Toast Notification
+  // Toast Notification with improved memory management
   function showToast(message) {
     const toastId = "toast-" + Date.now();
     const toast = `
@@ -391,19 +455,22 @@ $(document).ready(function () {
     $("#toast-container").append(toast);
 
     // Apply Bootstrap toast with custom options
-    new bootstrap.Toast(document.getElementById(toastId), {
+    const toastElement = document.getElementById(toastId);
+    const bsToast = new bootstrap.Toast(toastElement, {
       animation: true,
       autohide: true,
       delay: 3000,
-    }).show();
+    });
 
-    // Remove toast from DOM after it's hidden
-    $(`#${toastId}`).on("hidden.bs.toast", function () {
+    bsToast.show();
+
+    // Remove toast from DOM after it's hidden to prevent memory leaks
+    $(toastElement).on("hidden.bs.toast", function () {
       $(this).remove();
     });
   }
 
-  // Video Controls
+  // Video Controls with optimized event handlers
   $("video").on({
     mouseenter: function () {
       if (this.paused) {
@@ -413,24 +480,25 @@ $(document).ready(function () {
     },
     mouseleave: function () {
       $(this).removeAttr("title");
-      bootstrap.Tooltip.getInstance(this)?.dispose();
+      const tooltip = bootstrap.Tooltip.getInstance(this);
+      if (tooltip) tooltip.dispose();
     },
     click: function () {
       this.paused ? this.play() : this.pause();
     },
   });
 
-  // Initialize all tooltips
+  // Initialize all tooltips with delay for better performance
   setTimeout(function () {
-    var tooltipTriggerList = [].slice.call(
-      document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipTriggerList = document.querySelectorAll(
+      '[data-bs-toggle="tooltip"]'
     );
-    tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+    [...tooltipTriggerList].forEach((tooltipTriggerEl) => {
       new bootstrap.Tooltip(tooltipTriggerEl);
     });
   }, 2000);
 
-  // Smooth scrolling
+  // Smooth scrolling with optimized animation
   $('a[href^="#"]:not([data-bs-toggle])').on("click", function (e) {
     e.preventDefault();
     const target = $($(this).attr("href"));
@@ -444,27 +512,40 @@ $(document).ready(function () {
     }
   });
 
-  // Location Permission Handling
-  const locationPermission = localStorage.getItem("locationPermission");
-  if (!locationPermission) {
-    $("#locationModal").modal("show");
-  } else if (locationPermission === "granted") {
-    requestLocation(); // Auto-fetch weather if permission granted
-  }
+  // Location Permission Handler
+  const locationHandler = (() => {
+    const PERMISSION_KEY = "locationPermission";
+
+    const checkPermission = () => {
+      const permission = localStorage.getItem(PERMISSION_KEY);
+
+      if (!permission) {
+        $("#locationModal").modal("show");
+      } else if (permission === "granted") {
+        requestLocation();
+      }
+    };
+
+    const grantPermission = () => {
+      localStorage.setItem(PERMISSION_KEY, "granted");
+      $("#locationModal").modal("hide");
+      requestLocation();
+    };
+
+    const denyPermission = () => {
+      localStorage.setItem(PERMISSION_KEY, "denied");
+      $("#locationModal").modal("hide");
+      showToast("Enable location access in settings or search manually");
+    };
+
+    return { checkPermission, grantPermission, denyPermission };
+  })();
 
   // Event handlers for Allow/Deny buttons
-  $("#allowLocation").click(function () {
-    localStorage.setItem("locationPermission", "granted");
-    $("#locationModal").modal("hide");
-    requestLocation();
-  });
+  $("#allowLocation").click(locationHandler.grantPermission);
+  $("#denyLocation").click(locationHandler.denyPermission);
 
-  $("#denyLocation").click(function () {
-    localStorage.setItem("locationPermission", "denied");
-    $("#locationModal").modal("hide");
-    showToast("Enable location access or search manually");
-  });
-
+  // Request user location and get weather
   function requestLocation() {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
@@ -475,7 +556,8 @@ $(document).ready(function () {
         (error) => {
           showToast("Location access denied. Search for a location manually.");
           $("#locationModal").modal("hide");
-        }
+        },
+        { timeout: 10000 } // Add timeout to prevent hanging
       );
     } else {
       showToast("Geolocation not supported - search manually");
@@ -483,16 +565,21 @@ $(document).ready(function () {
     }
   }
 
+  // Get weather by coordinates
   async function getWeatherByCoords(lat, lon) {
-    const API_KEY = "95425a4f1ff33420efb87cc0706610af";
-    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
+    const url = `${WEATHER_API_BASE}?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
 
     try {
       const response = await fetch(url);
-      if (!response.ok) throw new Error("Weather data unavailable");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Weather data unavailable");
+      }
+
       const data = await response.json();
       displayWeather(data);
-      addRecentSearch(data.name);
+      storageManager.addSearch(data.name);
+      updateRecentSearches();
     } catch (error) {
       showToast("Couldn't get location weather. Search manually instead.");
     }
@@ -500,4 +587,7 @@ $(document).ready(function () {
 
   // Initialize recent searches on page load
   updateRecentSearches();
+
+  // Check location permission
+  locationHandler.checkPermission();
 });
