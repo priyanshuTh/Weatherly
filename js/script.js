@@ -165,6 +165,55 @@ $(document).ready(function () {
     }
   }
 
+  // Global variable to store the interval ID
+  let locationClockInterval = null;
+
+  // Function to update the location time based on timezone offset
+  function updateLocationTime(timezoneOffset) {
+    // Get current UTC time in milliseconds
+    const now = new Date();
+    const utcTime = now.getTime() + now.getTimezoneOffset() * 60000;
+
+    // Calculate location time using timezone offset (in seconds)
+    const locationTime = new Date(utcTime + timezoneOffset * 1000);
+
+    // Format the time
+    const timeString = locationTime.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    });
+
+    // Format the date
+    const dateString = locationTime.toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+    // Update the UI
+    $("#locationTime").text(timeString);
+    $("#locationDate").text(dateString);
+  }
+
+  // Function to start the location clock
+  function startLocationClock(timezoneOffset) {
+    // Clear any existing interval
+    if (locationClockInterval) {
+      clearInterval(locationClockInterval);
+    }
+
+    // Update time immediately
+    updateLocationTime(timezoneOffset);
+
+    // Set interval to update time every second
+    locationClockInterval = setInterval(() => {
+      updateLocationTime(timezoneOffset);
+    }, 1000);
+  }
+
   // Weather Display Function
   function displayWeather(data) {
     $("#weatherResults").removeClass("d-none");
@@ -179,6 +228,12 @@ $(document).ready(function () {
        width="200" 
        height="200">`
     );
+
+    // Calculate and display local time
+    updateLocationTime(data.timezone);
+
+    // Start the local time interval
+    startLocationClock(data.timezone);
 
     // Weather Data
     $("#temp").text(`${Math.round(data.main.temp)}°C`);
@@ -206,31 +261,39 @@ $(document).ready(function () {
     $("#sunrise").text(formatTime(data.sys.sunrise));
     $("#sunset").text(formatTime(data.sys.sunset));
 
-    // Update map markers
-    weatherMap.eachLayer((layer) => {
-      if (layer instanceof L.Marker) weatherMap.removeLayer(layer);
-    });
+    // Update map markers if the map exists
+    if (weatherMap) {
+      weatherMap.eachLayer((layer) => {
+        if (layer instanceof L.Marker) weatherMap.removeLayer(layer);
+      });
 
-    const marker = L.marker([data.coord.lat, data.coord.lon]).addTo(weatherMap)
-      .bindPopup(`
-        <div class="map-popup">
-          <h6 class="mb-1">${data.name}</h6>
-          <div class="row small">
-            <div class="col-6">
-              <i class="bi bi-thermometer"></i> ${Math.round(
-                data.main.temp
-              )}°C<br>
-              <i class="bi bi-wind"></i> ${data.wind.speed} m/s
-            </div>
-            <div class="col-6">
-              <i class="bi bi-droplet"></i> ${data.main.humidity}%<br>
-              <i class="bi bi-clouds"></i> ${data.clouds.all}%
+      const marker = L.marker([data.coord.lat, data.coord.lon]).addTo(
+        weatherMap
+      ).bindPopup(`
+          <div class="map-popup">
+            <h6 class="mb-1">${data.name}</h6>
+            <div class="row small">
+              <div class="col-6">
+                <i class="bi bi-thermometer"></i> ${Math.round(
+                  data.main.temp
+                )}°C<br>
+                <i class="bi bi-wind"></i> ${data.wind.speed} m/s
+              </div>
+              <div class="col-6">
+                <i class="bi bi-droplet"></i> ${data.main.humidity}%<br>
+                <i class="bi bi-clouds"></i> ${data.clouds.all}%
+              </div>
             </div>
           </div>
-        </div>
-      `);
+        `);
 
-    weatherMap.setView([data.coord.lat, data.coord.lon], 8);
+      weatherMap.setView([data.coord.lat, data.coord.lon], 8);
+    }
+
+    // Add animation class after a small delay
+    setTimeout(() => {
+      $("#weatherResults").addClass("show");
+    }, 100);
   }
 
   function addRecentSearch(location) {
@@ -284,7 +347,7 @@ $(document).ready(function () {
     performSearch(location);
   });
 
-  // Search Function
+  // Clear the interval when a new search is performed
   async function performSearch(location) {
     try {
       if (!location) {
@@ -292,8 +355,15 @@ $(document).ready(function () {
         return;
       }
 
+      // Clear existing interval before new search
+      if (locationClockInterval) {
+        clearInterval(locationClockInterval);
+      }
+
       showToast(`Searching for ${location}...`);
+      $("#weatherResults").removeClass("show");
       $("#weatherResults").addClass("d-none");
+
       const weatherData = await getWeatherData(location);
       displayWeather(weatherData);
       addRecentSearch(location);
@@ -308,15 +378,29 @@ $(document).ready(function () {
     const toast = `
       <div id="${toastId}" class="toast" role="alert">
         <div class="toast-header">
+          <i class="bi bi-info-circle text-primary me-2"></i>
           <strong class="me-auto">Weatherly</strong>
+          <small>${new Date().toLocaleTimeString()}</small>
           <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
         </div>
-        <div class="toast-body">${message}</div>
+        <div class="toast-body">
+          ${message}
+        </div>
       </div>`;
 
     $("#toast-container").append(toast);
-    new bootstrap.Toast(document.getElementById(toastId)).show();
-    $(`#${toastId}`).on("hidden.bs.toast", () => $(this).remove());
+
+    // Apply Bootstrap toast with custom options
+    new bootstrap.Toast(document.getElementById(toastId), {
+      animation: true,
+      autohide: true,
+      delay: 3000,
+    }).show();
+
+    // Remove toast from DOM after it's hidden
+    $(`#${toastId}`).on("hidden.bs.toast", function () {
+      $(this).remove();
+    });
   }
 
   // Video Controls
@@ -368,7 +452,7 @@ $(document).ready(function () {
     requestLocation(); // Auto-fetch weather if permission granted
   }
 
-  // Event handlers for Allow/Deny buttons (keep only one set)
+  // Event handlers for Allow/Deny buttons
   $("#allowLocation").click(function () {
     localStorage.setItem("locationPermission", "granted");
     $("#locationModal").modal("hide");
@@ -413,4 +497,7 @@ $(document).ready(function () {
       showToast("Couldn't get location weather. Search manually instead.");
     }
   }
+
+  // Initialize recent searches on page load
+  updateRecentSearches();
 });
