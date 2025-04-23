@@ -1,5 +1,7 @@
 # Weatherly 🌦️
 
+**Version:1.50**
+
 **Smart Weather Forecast at your fingertips**
 
 Weatherly is a modern, responsive weather web‑app that delivers real‑time forecasts, interactive maps, and personalised insights — all wrapped in an elegant UI that adapts to season and theme.
@@ -34,7 +36,7 @@ Weatherly is a modern, responsive weather web‑app that delivers real‑time fo
 
 ## Live Demo
 
->https://priyanshuth.github.io/Weatherly/index.html
+> https://priyanshuth.github.io/Weatherly/index.html
 
 ## Tech Stack
 
