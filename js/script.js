@@ -295,6 +295,8 @@ $(document).ready(function () {
     // Main Information
     $("#locationName").text(`${data.name}, ${data.sys.country}`);
     $("#weatherDescription").text(data.weather[0].description);
+
+    // Fix for weather icon
     $("#weatherIcon").html(
       `<img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@4x.png" 
        alt="${data.weather[0].description}" 
@@ -395,8 +397,8 @@ $(document).ready(function () {
     }
   }
 
-  // Click handler for recent searches
-  $(".recent-searches").on("click", "[data-location]", function (e) {
+  // Click handler for recent searches - Fixed to ensure it works properly
+  $(document).on("click", ".recent-searches [data-location]", function (e) {
     e.preventDefault();
     const location = $(this).data("location");
     $("#searchInput").val(location);
@@ -423,14 +425,18 @@ $(document).ready(function () {
       $(".weather-card").removeClass("show");
 
       // Use timeout to ensure animation completes before hiding
-      setTimeout(() => {
+      setTimeout(async () => {
         $("#weatherResults").addClass("d-none");
-      }, 300);
 
-      const weatherData = await getWeatherData(location);
-      displayWeather(weatherData);
-      storageManager.addSearch(location);
-      updateRecentSearches();
+        try {
+          const weatherData = await getWeatherData(location);
+          displayWeather(weatherData);
+          storageManager.addSearch(location);
+          updateRecentSearches();
+        } catch (error) {
+          showToast(error.message || "Failed to get weather data");
+        }
+      }, 300);
     } catch (error) {
       showToast(error.message || "Failed to get weather data");
     }
@@ -589,5 +595,7 @@ $(document).ready(function () {
   updateRecentSearches();
 
   // Check location permission
-  locationHandler.checkPermission();
+  setTimeout(() => {
+    locationHandler.checkPermission();
+  }, 1500); // Added delay to ensure DOM is ready
 });

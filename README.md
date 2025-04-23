@@ -1,6 +1,6 @@
 # Weatherly 🌦️
 
-**Version:1.50**
+**Version:1.60**
 
 **Smart Weather Forecast at your fingertips**
 
