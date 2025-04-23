@@ -230,6 +230,10 @@ body {
     line-height: 1;
 }
 
+body.dark-mode .weather-detail-label {
+    color: #adb5bd;
+}
+
 .weather-detail-value {
     display: block;
     color: var(--primary-color);
@@ -379,7 +383,7 @@ body {
 }
 
 .recent-places:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(159, 157, 157, 0.15);
 }
 
 .recent-places h3 {
@@ -400,7 +404,7 @@ body {
 }
 
 .recent-searches .list-group-item {
-    color: #333;
+    color: #a8a5a5;
     background-color: rgba(255, 255, 255, 0.8);
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
@@ -635,6 +639,16 @@ body.dark-mode .weather-detail-value {
     color: #6ea8fe;
 }
 
+/* Fix for locationDate text color in dark mode */
+body.dark-mode #locationDate {
+    color: #adb5bd !important;
+}
+
+/* Fix for text-muted in dark mode */
+body.dark-mode .text-muted {
+    color: #adb5bd !important;
+}
+
 body.dark-mode .weather-card .card-body {
     background-color: #2d2d2d !important;
     color: #fff !important;
@@ -655,10 +669,25 @@ body.dark-mode .time-icon-container {
 
 body.dark-mode #weatherIcon img {
     filter: drop-shadow(0 5px 15px rgba(255, 255, 255, 0.05));
+    /* Ensure proper visibility of weather icon in dark mode */
+    opacity: 1;
+    visibility: visible;
 }
 
 body.dark-mode #weatherIcon img:hover {
     filter: drop-shadow(0 8px 25px rgba(255, 255, 255, 0.1));
+    opacity: 1;
+}
+
+/* Fix for weather icon and text visibility in all modes */
+#weatherIcon img {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+#weatherDescription {
+    opacity: 1 !important;
+    visibility: visible !important;
 }
 
 body.dark-mode .toast-header {
