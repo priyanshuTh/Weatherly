@@ -34,9 +34,7 @@ Weatherly is a modern, responsive weather web‑app that delivers real‑time fo
 - 🍪 **Cookie notice** with persistent dismissal.
 - 📱 **Mobile‑first responsive design** (Bootstrap 5).
 
-## Live Demo
-
-> https://priyanshuth.github.io/Weatherly/index.html
+## [Live Demo](https://priyanshuth.github.io/Weatherly/index.html)
 
 ## Tech Stack
 
