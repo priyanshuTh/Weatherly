@@ -6,7 +6,7 @@
 
 Weatherly is a modern, responsive weather web‑app that delivers real‑time forecasts, interactive maps, and personalised insights — all wrapped in an elegant UI that adapts to season and theme.
 
-![Weatherly hero screenshot](assets/screenshots/hero.png)
+![Weatherly hero screenshot](assets/Screenshots/hero.png)
 
 ## Table of Contents
 
